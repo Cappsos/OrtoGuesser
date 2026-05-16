@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -20,7 +20,6 @@
         body { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<!-- Use 100dvh (dynamic viewport height) to prevent mobile browser UI from covering content -->
 <body class="bg-orange-50/30 text-slate-800 font-sans h-[100dvh] w-screen overflow-hidden flex flex-col">
 
     <!-- App Container -->
@@ -30,17 +29,16 @@
         <div id="screen-intro" class="hidden flex-col h-full justify-center px-5 sm:px-6 pb-8 overflow-y-auto">
             <div class="text-center mb-6 sm:mb-10 pt-6 sm:pt-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-orange-100 rounded-[1.25rem] sm:rounded-3xl mb-4 sm:mb-6 shadow-inner border border-orange-200">
-                    <!-- Sprout/Leaf Icon for "Orto" -->
                     <svg class="w-8 h-8 sm:w-10 sm:h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-2 sm:mb-3 tracking-tight">Orto<span class="text-orange-500">Guesser</span></h1>
-                <p class="text-stone-500 leading-relaxed text-xs sm:text-sm px-4">Impara i nomi degli studenti della Fondazione Elicsir.</p>
+                <p class="text-stone-500 leading-relaxed text-xs sm:text-sm px-4">Impara i nomi degli studenti e docenti della Fondazione Elicsir.</p>
             </div>
             
             <div class="space-y-3 sm:space-y-4">
                 <button onclick="loadViaProxy()" class="w-full group relative flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-4 bg-orange-500 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg shadow-orange-200 hover:bg-orange-600 active:scale-95 transition-all text-sm sm:text-base">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    <span>Recupera Dati</span>
+                    <span>Recupera Dati Online</span>
                 </button>
                 
                 <div class="relative flex items-center py-2 opacity-60">
@@ -55,10 +53,9 @@
                 </button>
             </div>
 
-            <!-- Manual Input Drawer -->
             <div id="manual-paste-section" class="hidden mt-4 sm:mt-6 bg-stone-100 p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-stone-200 animate-fade-in">
                 <textarea id="manual-html" class="w-full h-20 sm:h-28 p-3 text-xs font-mono bg-white border border-stone-300 rounded-lg sm:rounded-xl mb-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none shadow-inner" placeholder="Incolla l'HTML qui..."></textarea>
-                <button onclick="loadManual()" class="w-full py-2.5 sm:py-3 bg-stone-800 text-white rounded-lg sm:rounded-xl font-bold shadow-sm hover:bg-stone-900 active:scale-95 transition-all text-xs sm:text-sm">Analizza Studenti</button>
+                <button onclick="loadManual()" class="w-full py-2.5 sm:py-3 bg-stone-800 text-white rounded-lg sm:rounded-xl font-bold shadow-sm hover:bg-stone-900 active:scale-95 transition-all text-xs sm:text-sm">Analizza Profili</button>
             </div>
         </div>
 
@@ -74,12 +71,35 @@
 
         <!-- 3. REVIEW SCREEN -->
         <div id="screen-review" class="hidden flex-col h-full bg-stone-50 relative">
-            <div class="p-4 sm:p-6 bg-white border-b border-stone-100 shrink-0 z-10 shadow-sm flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5 sm:mb-1">Il tuo Mazzo</h2>
-                    <p class="text-xs sm:text-sm text-stone-500">Trovati <span id="review-count" class="font-bold text-orange-500">0</span> studenti.</p>
+            <div class="p-4 sm:p-5 bg-white border-b border-stone-200 shrink-0 z-10 shadow-sm flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5">Il tuo Mazzo</h2>
+                        <p class="text-xs sm:text-sm text-stone-500">Trovati <span id="review-count" class="font-bold text-orange-500">0</span> profili.</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-xl border border-stone-100">
+                        <span class="text-[11px] font-bold text-stone-500 uppercase">Docenti</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggle-docenti" class="sr-only peer" onchange="toggleDocenti()">
+                            <div class="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500"></div>
+                        </label>
+                    </div>
                 </div>
-                <!-- Export button rimosso come richiesto -->
+                
+                <div class="flex flex-wrap gap-2 pt-1 border-t border-stone-100" id="group-filters">
+                    <button onclick="toggleGroup('1')" id="btn-group-1" class="px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm">
+                        <span>1° Ciclo</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                    <button onclick="toggleGroup('2')" id="btn-group-2" class="px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm">
+                        <span>2° Ciclo</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                    <button onclick="toggleGroup('c')" id="btn-group-c" class="px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm">
+                        <span>Contaminandi</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                </div>
             </div>
             
             <div id="review-list" class="flex-1 overflow-y-auto no-scrollbar divide-y divide-stone-100 bg-white">
@@ -96,14 +116,12 @@
 
         <!-- 4. GAME SCREEN -->
         <div id="screen-game" class="hidden flex-col h-full relative">
-            <!-- Header / Progress bar -->
             <div class="px-4 sm:px-6 py-4 sm:py-5 shrink-0 bg-white border-b border-stone-200">
                 <div class="flex justify-between items-end mb-2 sm:mb-3">
                     <div class="flex flex-col">
                         <span class="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Imparati</span>
                         <span class="text-base sm:text-lg font-extrabold text-stone-800"><span id="game-learned">0</span> <span class="text-stone-400 text-xs sm:text-sm font-medium">/ <span id="game-total">0</span></span></span>
                     </div>
-                    <!-- Timer -->
                     <div class="flex flex-col items-center">
                         <span class="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Tempo</span>
                         <span class="text-base sm:text-lg font-extrabold text-stone-800" id="game-timer">00:00</span>
@@ -118,32 +136,26 @@
                 </div>
             </div>
 
-            <!-- Flashcard Area (Scrollable if height is extremely small) -->
             <div class="flex-1 flex flex-col items-center justify-center p-4 min-h-0 overflow-y-auto no-scrollbar relative w-full">
-                <!-- The Card -->
                 <div class="w-[90vw] sm:w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] cursor-pointer perspective relative z-10 group shrink-0" onclick="flipCard()">
                     <div id="flashcard-inner" class="relative w-full h-full transition-transform duration-500 preserve-3d">
                         
-                        <!-- Front (Solo Immagine Ingrandita) -->
+                        <!-- Front -->
                         <div class="absolute inset-0 backface-hidden bg-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-stone-200 flex flex-col p-3.5 sm:p-4 transform group-hover:-translate-y-1 transition-transform">
-                            
                             <div class="w-full h-[85%] sm:h-[85%] mb-2 relative rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 shadow-inner flex items-center justify-center">
                                 <img id="card-front-img" src="" class="absolute inset-0 w-full h-full object-cover object-top z-10" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2QxZDVkYiI+PHBhdGggZD0iTTEyIDEyYy0yLjc2IDEuNS01IDEuNS01IDMuNXYxdjFINWguNWgxM2guNXYtMXYtMWMwLTIuNS0yLjI0LTIuNS01LTMuNXptMC0xYTMuNSAzLjUgMCAxIDAgMC03IDMuNSAzLjUgMCAwIDAgMCA3eiIvPjwvc3ZnPg=='">
                             </div>
-                            
                             <div class="mt-auto pt-1 text-[11px] sm:text-xs text-orange-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1 sm:gap-1.5 animate-pulse pb-1 sm:pb-2">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
                                 Tocca per girare
                             </div>
                         </div>
 
-                        <!-- Back (Nome e Università) -->
+                        <!-- Back -->
                         <div class="absolute inset-0 backface-hidden bg-orange-500 text-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(249,115,22,0.3)] flex flex-col items-center justify-center p-6 sm:p-8 text-center rotate-y-180 border border-orange-400">
-                            <p class="text-xs sm:text-sm font-bold text-orange-200 uppercase tracking-widest mb-1 sm:mb-2 drop-shadow-sm">Studente</p>
+                            <p id="card-back-role" class="text-xs sm:text-sm font-bold text-orange-200 uppercase tracking-widest mb-1 sm:mb-2 drop-shadow-sm">Studente</p>
                             <h2 id="card-back-name" class="text-3xl sm:text-4xl font-extrabold mb-2 leading-tight drop-shadow-md"></h2>
-                            
                             <p id="card-back-uni" class="text-sm sm:text-base font-medium text-orange-100 mb-6 sm:mb-8 line-clamp-3 px-2"></p>
-                            
                             <div class="w-20 h-28 sm:w-24 sm:h-32 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner opacity-70 mix-blend-luminosity ring-2 ring-orange-300 bg-white/20">
                                 <img id="card-back-img" src="" class="w-full h-full object-cover object-top">
                             </div>
@@ -151,7 +163,7 @@
                     </div>
                 </div>
 
-                <!-- Actions / Buttons -->
+                <!-- Actions -->
                 <div id="game-actions" class="w-[90vw] sm:w-full max-w-[320px] sm:max-w-[360px] flex gap-3 mt-4 sm:mt-6 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 shrink-0 pb-2">
                     <button onclick="handleAnswer(false)" class="flex-1 py-4 sm:py-5 bg-white border-2 border-red-100 text-red-500 rounded-xl sm:rounded-2xl font-extrabold shadow-sm hover:bg-red-50 active:scale-95 transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1">
                         <svg class="w-6 h-6 sm:w-7 sm:h-7 mb-0.5 sm:mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -178,7 +190,7 @@
                     <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                 </div>
                 <h2 class="text-3xl sm:text-4xl font-extrabold mb-2 sm:mb-3 drop-shadow-md">Completato!</h2>
-                <p class="text-orange-100 text-sm sm:text-lg mb-2 max-w-xs drop-shadow-sm">Hai imparato tutti gli studenti nel mazzo.</p>
+                <p class="text-orange-100 text-sm sm:text-lg mb-2 max-w-xs drop-shadow-sm">Hai imparato tutti i profili nel mazzo.</p>
                 
                 <div class="bg-orange-600 rounded-xl px-6 py-3 mb-8 sm:mb-10 shadow-inner">
                     <p class="text-xs font-bold text-orange-200 uppercase tracking-widest mb-1">Tempo Totale</p>
@@ -195,102 +207,160 @@
 
     <script>
         // =========================================================================
-        // DATI STATICI (Estratti)
+        // DATI STATICI: I MENTOR (Integrazione con la tua lista)
+        // =========================================================================
+        const STATIC_FACULTY = [
+            // ── Consiglio ──────────────────────────────────────────────────────────
+            { id:"fac001", group:"consiglio", name:"Lorenzo Alvisi",         university:"Cornell University",                   image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Lorenzo-Alvisi.jpg?v=1.0.006" },
+            { id:"fac002", group:"consiglio", name:"Ozalp Babaoglu",         university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Ozalp-Babaoglu.jpg?v=1.0.006" },
+            { id:"fac003", group:"consiglio", name:"Gianfranco Bilardi",     university:"Università di Padova",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Gianfranco-Bilardi.jpg?v=1.0.006" },
+            { id:"fac004", group:"consiglio", name:"Alessandro Panconesi",   university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/1J4A9208-scaled-e1770389704776.jpg?v=1.0.006" },
+            // ── Coordinamento ──────────────────────────────────────────────────────
+            { id:"fac005", group:"coordinamento", name:"Bruno Codenotti",    university:"CNR di Pisa",                          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Bruno-Codenotti_ok.jpg?v=1.0.006" },
+            // ── Mentori ────────────────────────────────────────────────────────────
+            { id:"fac006", group:"mentori", name:"Paolo Boldi",              university:"Università degli Studi di Milano",     image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Paolo_Boldi_ok.jpg?v=1.0.006" },
+            { id:"fac007", group:"mentori", name:"Valeria Cardellini",       university:"Università di Roma Tor Vergata",       image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Valeria-Cardellini-2.jpg?v=1.0.006" },
+            { id:"fac008", group:"mentori", name:"Matteo Ceccarello",        university:"Università di Padova",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/ceccarello-scaled.jpg?v=1.0.006" },
+            { id:"fac009", group:"mentori", name:"Flavio Chierichetti",      university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Flavio-Chierichetti-1.jpg?v=1.0.006" },
+            { id:"fac010", group:"mentori", name:"Vincenzo Cutello",         university:"Università di Catania",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Lorenzo-Orecchia.jpg?v=1.0.006" },
+            { id:"fac011", group:"mentori", name:"Roberto De Prisco",        university:"Università degli Studi di Salerno",    image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Roberto-De-Prisco-1.jpg?v=1.0.006" },
+            { id:"fac012", group:"mentori", name:"Barbara Di Camillo",       university:"Università di Padova",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Barbara-Di-Camillo.jpg?v=1.0.006" },
+            { id:"fac013", group:"mentori", name:"Matteo Frigo",             university:"Industria (ex MIT)",                   image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Matte-Frigo_ok.jpg?v=1.0.006" },
+            { id:"fac014", group:"mentori", name:"Zeynep Kiziltan",          university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Zeynep-Kiziltan_ok.jpg?v=1.0.006" },
+            { id:"fac015", group:"mentori", name:"Vittorio Maniezzo",        university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Vittorio-Maniezzo-1.jpg?v=1.0.006" },
+            { id:"fac016", group:"mentori", name:"Giovanni Manzini",         university:"Università di Pisa",                   image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/giovanni-manzini-scaled.jpeg?v=1.0.006" },
+            { id:"fac017", group:"mentori", name:"Iacopo Masi",              university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Iacopo-Masi_ok.jpg?v=1.0.006" },
+            { id:"fac018", group:"mentori", name:"Alberto Montresor",        university:"Università di Trento",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alberto-Montresor_ok.jpg?v=1.0.006" },
+            { id:"fac019", group:"mentori", name:"Antonio Norelli",          university:"Oxford University",                    image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Antonio-Norelli_ok.jpg?v=1.0.006" },
+            { id:"fac020", group:"mentori", name:"Elena Loli Piccolomini",   university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Elena-Loli-Piccolomini_ok.jpg?v=1.0.006" },
+            { id:"fac021", group:"mentori", name:"Andrea Pietracaprina",     university:"Università di Padova",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/1J4A8908-scaled.jpg?v=1.0.006" },
+            { id:"fac022", group:"mentori", name:"Nicola Prezza",            university:"Università Ca' Foscari di Venezia",    image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Nicola-Prezza.jpg?v=1.0.006" },
+            { id:"fac023", group:"mentori", name:"Geppino Pucci",            university:"Università di Padova",                 image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/1J4A8901-copia-scaled.jpeg?v=1.0.006" },
+            { id:"fac024", group:"mentori", name:"Simona Ester Rombo",       university:"Università degli Studi di Palermo",    image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Simona-Ester-Rombo.jpg?v=1.0.006" },
+            { id:"fac025", group:"mentori", name:"Erasmo Tani",              university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Erasmo-Tani.jpg?v=1.0.006" },
+            { id:"fac026", group:"mentori", name:"Daniele Venturi",          university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Daniele-Venturi-1.jpg?v=1.0.006" },
+            // ── Docenti Invitati ───────────────────────────────────────────────────
+            { id:"fac027", group:"invitati", name:"Federico Barbero",        university:"Google DeepMind",                      image:"https://elicsir-wp.afterpixel.com/app/uploads/2026/01/federico_barbero-scaled.jpeg?v=1.0.006" },
+            { id:"fac028", group:"invitati", name:"Nicolò Cesa-Bianchi",    university:"Università degli Studi di Milano",     image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Nicolo-Cesa-Bianchi.jpg?v=1.0.006" },
+            { id:"fac029", group:"invitati", name:"Michele Colajanni",       university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Michele-Colajanni.jpg?v=1.0.006" },
+            { id:"fac030", group:"invitati", name:"Abe Davis",               university:"Cornell University",                   image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Abe-Davis.jpg?v=1.0.006" },
+            { id:"fac031", group:"invitati", name:"Mirko Giacchini",         university:"Sapienza Università di Roma",          image:"https://elicsir-wp.afterpixel.com/app/uploads/2026/05/mirko-elicsir-scaled-e1777745877146.jpeg?v=1.0.006" },
+            { id:"fac032", group:"invitati", name:"Cristiano Giuffrida",     university:"Vrije Universiteit Amsterdam",         image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/12/cristiano_giuffrida.png?v=1.0.006" },
+            { id:"fac033", group:"invitati", name:"Bill Joy",                university:"KPCB (co-fondatore Sun Microsystems)", image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Bill_Joy.jpg?v=1.0.006" },
+            { id:"fac034", group:"invitati", name:"Manos Kapritsos",         university:"University of Michigan",               image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/kapritsos-elicsir-scaled-e1777742824684.jpeg?v=1.0.006" },
+            { id:"fac035", group:"invitati", name:"Bobby Kleinberg",         university:"Cornell University",                   image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/kleinberg-elicsir-scaled-e1777742913450.jpeg?v=1.0.006" },
+            { id:"fac036", group:"invitati", name:"Adam Klivans",            university:"University of Texas at Austin",        image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/klivans-elicsir-scaled-e1777743000400.jpeg?v=1.0.006" },
+            { id:"fac037", group:"invitati", name:"Francesco Locatello",     university:"ISTA Austria",                         image:"https://elicsir-wp.afterpixel.com/app/uploads/2026/01/francesco_locatello-e1767867243622.jpeg?v=1.0.006" },
+            { id:"fac038", group:"invitati", name:"Andrea Lodi",             university:"Cornell Tech / Technion",              image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/10/andreea_lodi.png?v=1.0.006" },
+            { id:"fac039", group:"invitati", name:"Simone Martini",          university:"Università di Bologna",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/11/tessera-giglio.jpg?v=1.0.006" },
+            { id:"fac040", group:"invitati", name:"Marco Mondelli",          university:"ISTA Austria",                         image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/12/marco_mondelli-scaled-e1766312010795.jpg?v=1.0.006" },
+            { id:"fac041", group:"invitati", name:"Moreno Muffatto",         university:"Università degli Studi di Padova",     image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/12/Foto-MM.jpg?v=1.0.006" },
+            { id:"fac042", group:"invitati", name:"Lorenzo Orecchia",        university:"Università di Chicago",                image:"https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Lorenzo-Orecchia_ok.jpg?v=1.0.006" }
+        ];
+
+        // =========================================================================
+        // DATI STATICI: GLI STUDENTI CON I GRUPPI
         // =========================================================================
         const STATIC_STUDENTS = [
-            { id: "jr49uxos3", name: "Alberto Barbato", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/AlbertoBarbato-scaled-e1763931352929.jpeg?v=1.0.006" },
-            { id: "nqa42ok9x", name: "Daniele Bignardi", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Daniele-Bignardi.jpg?v=1.0.006" },
-            { id: "0lva749zf", name: "Ivan Buttignon", university: "Università degli Studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Buttignon_Ivan.jpg?v=1.0.006" },
-            { id: "gyxadl27f", name: "Nicolò Cappa", university: "Università degli Studi di Milano e Pavia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicolo_Cappa.png?v=1.0.006" },
-            { id: "xzonzh73e", name: "Manuel Cieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Manuel-Cieri.jpg?v=1.0.006" },
-            { id: "wptv5k02q", name: "Umberto Crema", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Umbero-Crema.jpg?v=1.0.006" },
-            { id: "elcr7oncm", name: "Marco Fasoli", university: "Università degli Studi di Genova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/MarcoFasoli.jpeg?v=1.0.006" },
-            { id: "zp13vd0ex", name: "Sara Ferraro", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/SaraFerraro.jpg?v=1.0.006" },
-            { id: "4qbmhvkbo", name: "Nicola Figus", university: "Università degli Studi di Cagliari", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicola-Figus.png?v=1.0.006" },
-            { id: "owbhm3rtw", name: "Sara Giuriati", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giuriati_Sara_900x1200.jpg?v=1.0.006" },
-            { id: "rufanlg96", name: "Monica Jin", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Monica-Jin.jpg?v=1.0.006" },
-            { id: "ycvspk2ue", name: "Samuele Manclossi", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Samuele-Manclossi.png?v=1.0.006" },
-            { id: "upvw8levl", name: "Geraldine Montella", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Geraldine_Montella.jpg?v=1.0.006" },
-            { id: "1c3a3zi59", name: "Daniele Muscillo", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Daniele-Muscillo.png?v=1.0.006" },
-            { id: "sr6bv76o9", name: "Elettra Palmisano", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Elettra-Palmisano.jpg?v=1.0.006" },
-            { id: "3xzvmtp13", name: "Sonia Sapia", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Sonia-Sapia.jpg?v=1.0.006" },
-            { id: "up67zxeyn", name: "Enrico Savorgnan", university: "Università degli studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Enrico-Savorgnan.jpg?v=1.0.006" },
-            { id: "iafwt9xi5", name: "Samuel Seligardi", university: "Università degli Studi di Parma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Samuel-Seligardi.jpg?v=1.0.006" },
-            { id: "f98cgyd3w", name: "Marco Tessari", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Marco-Tessari.jpg?v=1.0.006" },
-            { id: "4rdlunj50", name: "Lisa Vecchi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Lisa-Vecchi.jpeg?v=1.0.006" },
-            { id: "xvuaom6oj", name: "Gianfranco Vitiello", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/GIANFRANCO_VITIELLO.jpg?v=1.0.006" },
-            { id: "kt3am2eb0", name: "Samuele Artico", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele_Artico-scaled.png?v=1.0.006" },
-            { id: "0u80b0j1g", name: "Martyna Babiak", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/martycut.jpeg?v=1.0.006" },
-            { id: "zmkxw53af", name: "Niccolò Ballardini", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/NICCOLO-BALLARDINI.jpeg?v=1.0.006" },
-            { id: "tgykgj3r7", name: "Erica Benedetto", university: "Università di Pisa", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Erica-Benedetto.jpg?v=1.0.006" },
-            { id: "6s4kp7zwr", name: "Alessandro Calderoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/calderoni.jpeg?v=1.0.006" },
-            { id: "f2vhq453n", name: "Noemi Gambirasio", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Noemi-Gambirasio.png?v=1.0.006" },
-            { id: "8640wudqa", name: "Christian Kadiu", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Christian_Kadiu.jpg?v=1.0.006" },
-            { id: "7gwly3ivu", name: "Elena Mannoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Elena-Mannoni.jpg?v=1.0.006" },
-            { id: "er67bd1a9", name: "Mattia Marchesini", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mattia_Marchesini-1.jpeg?v=1.0.006" },
-            { id: "e76nr4f08", name: "Leonardo Meloni", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Leonardo-Meloni.jpg?v=1.0.006" },
-            { id: "jwhnfnn6z", name: "Vittoria Mian", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Vittoria_Mian-scaled.jpeg?v=1.0.006" },
-            { id: "vkv3n4oyy", name: "Giulia Montagnani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Giulia-Montagnani.png?v=1.0.006" },
-            { id: "jyu8suqpf", name: "Samuele Maria Morreale", university: "Università degli Studi di Palermo", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele-Maria-Morreale.jpg?v=1.0.006" },
-            { id: "vjwxu5c9k", name: "Federico Petucco", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/FedericoPetucco.jpg?v=1.0.006" },
-            { id: "4jgpbu8so", name: "Beatrice Pomi", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Beatrice-Pomi-scaled-e1762162237544.png?v=1.0.006" },
-            { id: "jbv0ycuko", name: "Maristella Rega", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Maristella-Rega.png?v=1.0.006" },
-            { id: "7cvd19fxv", name: "Ettore Sozzi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Ettore_Sozzi-scaled.jpg?v=1.0.006" },
-            { id: "y5fcpvn1w", name: "Andrea Squitieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Andrea-Squitieri.png?v=1.0.006" },
-            { id: "pk2nw2eyw", name: "Mirco Tucci", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mirco-Tucci.jpg?v=1.0.006" },
-            { id: "zmvph2uz9", name: "Stefano Zanon", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Stefano-Zanon.jpg?v=1.0.006" },
-            { id: "228dcmkqf", name: "Giulia Beraldo", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giulia-Beraldo.jpg?v=1.0.006" },
-            { id: "yl9suc3j8", name: "Matteo Canton", university: "Università degli Studi di Udine", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Matteo-Canton.jpg?v=1.0.006" },
-            { id: "txwwffpt1", name: "Ludovico Cappellato", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Ludovico-Cappellato-scaled-1.jpg?v=1.0.006" },
-            { id: "k763l47fo", name: "Riccardo Chimisso", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Riccardo-Chimisso-scaled.jpg?v=1.0.006" },
-            { id: "8pg53j6gq", name: "Antonella Coviello", university: "Politecnico di Torino- Alta Scuola Politecnica", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Antonella-Coviello.jpg?v=1.0.006" },
-            { id: "npa9h8dh4", name: "Alessandro Dario", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alessandro-Dario.jpg?v=1.0.006" },
-            { id: "me0vc23c3", name: "Veronica Di Gennaro", university: "Politecnico di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Veronica-Di-Gennaro-scaled.jpg?v=1.0.006" },
-            { id: "u7j15a211", name: "Filippo Garagnani", university: "Università di Modena e Reggio Emilia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/1000240937.jpg?v=1.0.006" },
-            { id: "bitpkppu2", name: "Francesco Giordani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Francesco-Giordani.jpeg?v=1.0.006" },
-            { id: "zyabsar24", name: "Nancy Kalaj", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Nancy-Kalaj.jpg?v=1.0.006" },
-            { id: "zj22rw7os", name: "Federico Mingardi", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Federico-Mingardi.jpg?v=1.0.006" },
-            { id: "tzot8s2cy", name: "Silvia Mondin", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Silvia-Mondin.jpg?v=1.0.006" },
-            { id: "8pctx1ol6", name: "Simone Moretti", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Simone_Moretti-1.jpg?v=1.0.006" },
-            { id: "ym0j0on4g", name: "Dario Moschetti", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Dario-Moschetti.png?v=1.0.006" },
-            { id: "z3nnvf9bg", name: "Carlotta Nunziati", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/CarlottaNunziati.png?v=1.0.006" },
-            { id: "tfnvycaa8", name: "Marco Simoncini", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Marco-Simoncini.jpg?v=1.0.006" },
-            { id: "fn3bzvqj8", name: "Kristjan Tarantelli", university: "Sapienza- Scuola di Studi Avanzati", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Kristjan-Tarantelli.png?v=1.0.006" },
-            { id: "g300ygfgw", name: "Alberto Vendramini", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alberto-Vendramini.jpg?v=1.0.006" },
-            { id: "w8dxzx6cp", name: "Francesco Visonà", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Francesco-Visona.jpg?v=1.0.006" }
+            // --- 1° CICLO ('1') ---
+            { id: "jr49uxos3", name: "Alberto Barbato", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/AlbertoBarbato-scaled-e1763931352929.jpeg?v=1.0.006", group: "1" },
+            { id: "nqa42ok9x", name: "Daniele Bignardi", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Daniele-Bignardi.jpg?v=1.0.006", group: "1" },
+            { id: "0lva749zf", name: "Ivan Buttignon", university: "Università degli Studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Buttignon_Ivan.jpg?v=1.0.006", group: "1" },
+            { id: "gyxadl27f", name: "Nicolò Cappa", university: "Università degli Studi di Milano e Pavia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicolo_Cappa.png?v=1.0.006", group: "1" },
+            { id: "xzonzh73e", name: "Manuel Cieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Manuel-Cieri.jpg?v=1.0.006", group: "1" },
+            { id: "wptv5k02q", name: "Umberto Crema", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Umbero-Crema.jpg?v=1.0.006", group: "1" },
+            { id: "elcr7oncm", name: "Marco Fasoli", university: "Università degli Studi di Genova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/MarcoFasoli.jpeg?v=1.0.006", group: "1" },
+            { id: "zp13vd0ex", name: "Sara Ferraro", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/SaraFerraro.jpg?v=1.0.006", group: "1" },
+            { id: "4qbmhvkbo", name: "Nicola Figus", university: "Università degli Studi di Cagliari", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicola-Figus.png?v=1.0.006", group: "1" },
+            { id: "owbhm3rtw", name: "Sara Giuriati", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giuriati_Sara_900x1200.jpg?v=1.0.006", group: "1" },
+            { id: "rufanlg96", name: "Monica Jin", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Monica-Jin.jpg?v=1.0.006", group: "1" },
+            { id: "ycvspk2ue", name: "Samuele Manclossi", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Samuele-Manclossi.png?v=1.0.006", group: "1" },
+            { id: "upvw8levl", name: "Geraldine Montella", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Geraldine_Montella.jpg?v=1.0.006", group: "1" },
+            { id: "1c3a3zi59", name: "Daniele Muscillo", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Daniele-Muscillo.png?v=1.0.006", group: "1" },
+            { id: "sr6bv76o9", name: "Elettra Palmisano", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Elettra-Palmisano.jpg?v=1.0.006", group: "1" },
+            { id: "3xzvmtp13", name: "Sonia Sapia", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Sonia-Sapia.jpg?v=1.0.006", group: "1" },
+            { id: "up67zxeyn", name: "Enrico Savorgnan", university: "Università degli studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Enrico-Savorgnan.jpg?v=1.0.006", group: "1" },
+            { id: "iafwt9xi5", name: "Samuel Seligardi", university: "Università degli Studi di Parma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Samuel-Seligardi.jpg?v=1.0.006", group: "1" },
+            { id: "f98cgyd3w", name: "Marco Tessari", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Marco-Tessari.jpg?v=1.0.006", group: "1" },
+            { id: "4rdlunj50", name: "Lisa Vecchi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Lisa-Vecchi.jpeg?v=1.0.006", group: "1" },
+            { id: "xvuaom6oj", name: "Gianfranco Vitiello", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/GIANFRANCO_VITIELLO.jpg?v=1.0.006", group: "1" },
+            // --- CONTAMINANDI ('c') ---
+            { id: "kt3am2eb0", name: "Samuele Artico", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele_Artico-scaled.png?v=1.0.006", group: "c" },
+            { id: "0u80b0j1g", name: "Martyna Babiak", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/martycut.jpeg?v=1.0.006", group: "c" },
+            { id: "zmkxw53af", name: "Niccolò Ballardini", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/NICCOLO-BALLARDINI.jpeg?v=1.0.006", group: "c" },
+            { id: "tgykgj3r7", name: "Erica Benedetto", university: "Università di Pisa", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Erica-Benedetto.jpg?v=1.0.006", group: "c" },
+            { id: "6s4kp7zwr", name: "Alessandro Calderoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/calderoni.jpeg?v=1.0.006", group: "c" },
+            { id: "f2vhq453n", name: "Noemi Gambirasio", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Noemi-Gambirasio.png?v=1.0.006", group: "c" },
+            { id: "8640wudqa", name: "Christian Kadiu", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Christian_Kadiu.jpg?v=1.0.006", group: "c" },
+            { id: "7gwly3ivu", name: "Elena Mannoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Elena-Mannoni.jpg?v=1.0.006", group: "c" },
+            { id: "er67bd1a9", name: "Mattia Marchesini", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mattia_Marchesini-1.jpeg?v=1.0.006", group: "c" },
+            { id: "e76nr4f08", name: "Leonardo Meloni", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Leonardo-Meloni.jpg?v=1.0.006", group: "c" },
+            { id: "jwhnfnn6z", name: "Vittoria Mian", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Vittoria_Mian-scaled.jpeg?v=1.0.006", group: "c" },
+            { id: "vkv3n4oyy", name: "Giulia Montagnani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Giulia-Montagnani.png?v=1.0.006", group: "c" },
+            { id: "jyu8suqpf", name: "Samuele Maria Morreale", university: "Università degli Studi di Palermo", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele-Maria-Morreale.jpg?v=1.0.006", group: "c" },
+            { id: "vjwxu5c9k", name: "Federico Petucco", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/FedericoPetucco.jpg?v=1.0.006", group: "c" },
+            { id: "4jgpbu8so", name: "Beatrice Pomi", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Beatrice-Pomi-scaled-e1762162237544.png?v=1.0.006", group: "c" },
+            { id: "jbv0ycuko", name: "Maristella Rega", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Maristella-Rega.png?v=1.0.006", group: "c" },
+            { id: "7cvd19fxv", name: "Ettore Sozzi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Ettore_Sozzi-scaled.jpg?v=1.0.006", group: "c" },
+            { id: "y5fcpvn1w", name: "Andrea Squitieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Andrea-Squitieri.png?v=1.0.006", group: "c" },
+            { id: "pk2nw2eyw", name: "Mirco Tucci", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mirco-Tucci.jpg?v=1.0.006", group: "c" },
+            { id: "zmvph2uz9", name: "Stefano Zanon", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Stefano-Zanon.jpg?v=1.0.006", group: "c" },
+            // --- 2° CICLO ('2') ---
+            { id: "228dcmkqf", name: "Giulia Beraldo", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giulia-Beraldo.jpg?v=1.0.006", group: "2" },
+            { id: "yl9suc3j8", name: "Matteo Canton", university: "Università degli Studi di Udine", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Matteo-Canton.jpg?v=1.0.006", group: "2" },
+            { id: "txwwffpt1", name: "Ludovico Cappellato", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Ludovico-Cappellato-scaled-1.jpg?v=1.0.006", group: "2" },
+            { id: "k763l47fo", name: "Riccardo Chimisso", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Riccardo-Chimisso-scaled.jpg?v=1.0.006", group: "2" },
+            { id: "8pg53j6gq", name: "Antonella Coviello", university: "Politecnico di Torino- Alta Scuola Politecnica", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Antonella-Coviello.jpg?v=1.0.006", group: "2" },
+            { id: "npa9h8dh4", name: "Alessandro Dario", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alessandro-Dario.jpg?v=1.0.006", group: "2" },
+            { id: "me0vc23c3", name: "Veronica Di Gennaro", university: "Politecnico di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Veronica-Di-Gennaro-scaled.jpg?v=1.0.006", group: "2" },
+            { id: "u7j15a211", name: "Filippo Garagnani", university: "Università di Modena e Reggio Emilia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/1000240937.jpg?v=1.0.006", group: "2" },
+            { id: "bitpkppu2", name: "Francesco Giordani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Francesco-Giordani.jpeg?v=1.0.006", group: "2" },
+            { id: "zyabsar24", name: "Nancy Kalaj", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Nancy-Kalaj.jpg?v=1.0.006", group: "2" },
+            { id: "zj22rw7os", name: "Federico Mingardi", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Federico-Mingardi.jpg?v=1.0.006", group: "2" },
+            { id: "tzot8s2cy", name: "Silvia Mondin", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Silvia-Mondin.jpg?v=1.0.006", group: "2" },
+            { id: "8pctx1ol6", name: "Simone Moretti", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Simone_Moretti-1.jpg?v=1.0.006", group: "2" },
+            { id: "ym0j0on4g", name: "Dario Moschetti", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Dario-Moschetti.png?v=1.0.006", group: "2" },
+            { id: "z3nnvf9bg", name: "Carlotta Nunziati", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/CarlottaNunziati.png?v=1.0.006", group: "2" },
+            { id: "tfnvycaa8", name: "Marco Simoncini", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Marco-Simoncini.jpg?v=1.0.006", group: "2" },
+            { id: "fn3bzvqj8", name: "Kristjan Tarantelli", university: "Sapienza- Scuola di Studi Avanzati", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Kristjan-Tarantelli.png?v=1.0.006", group: "2" },
+            { id: "g300ygfgw", name: "Alberto Vendramini", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alberto-Vendramini.jpg?v=1.0.006", group: "2" },
+            { id: "w8dxzx6cp", name: "Francesco Visonà", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Francesco-Visona.jpg?v=1.0.006", group: "2" }
         ];
-        // =========================================================================
 
+        // State Manager
         const appData = {
-            students: [],
-            deck: [],
+            baseStudents: [...STATIC_STUDENTS],
+            students: [], // Active deck
+            deck: [],     // Deck being played
             learned: 0,
             total: 0,
             currentStudent: null,
             isFlipped: false,
             timerInterval: null,
-            secondsElapsed: 0
+            secondsElapsed: 0,
+            removedGroups: new Set(),
+            removedIds: new Set(),
+            includeDocenti: false
         };
 
-        // Funzione per formattare il timer (essenziale per far avviare il gioco!)
         function formatTime(sec) {
             const m = Math.floor(sec / 60).toString().padStart(2, '0');
             const s = (sec % 60).toString().padStart(2, '0');
             return `${m}:${s}`;
         }
 
-        // App Initialization
         window.onload = () => {
             if (STATIC_STUDENTS && STATIC_STUDENTS.length > 0) {
-                // Instantly load static data
-                appData.students = [...STATIC_STUDENTS];
-                renderReviewList();
-                showScreen('screen-review');
+                initApp();
             } else {
-                // Show intro screen to fetch data
                 showScreen('screen-intro');
             }
         };
+
+        function initApp() {
+            updateActiveDeck();
+            showScreen('screen-review');
+        }
 
         function showScreen(screenId) {
             const screens = ['screen-intro', 'screen-loading', 'screen-review', 'screen-game', 'screen-end'];
@@ -317,19 +387,14 @@
         async function loadViaProxy() {
             showScreen('screen-loading');
             const titleEl = document.getElementById('loading-title');
-            const descEl = document.getElementById('loading-desc');
             const targetUrl = 'https://www.elicsir.it/studenti';
             
             let htmlText = '';
-            
             try {
                 titleEl.textContent = "Tentativo Proxy 1...";
                 const res1 = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`);
-                if (res1.ok) {
-                    htmlText = await res1.text();
-                } else {
-                    throw new Error("Proxy 1 failed");
-                }
+                if (res1.ok) htmlText = await res1.text();
+                else throw new Error("Proxy failed");
             } catch (e1) {
                 try {
                     titleEl.textContent = "Tentativo Proxy 2...";
@@ -337,9 +402,7 @@
                     if (res2.ok) {
                         const data = await res2.json();
                         htmlText = data.contents;
-                    } else {
-                        throw new Error("Proxy 2 failed");
-                    }
+                    } else throw new Error("Proxy failed");
                 } catch (e2) {
                     alert("Errore di Rete: I proxy sono bloccati. Clicca su 'Incolla Codice HTML'.");
                     showScreen('screen-intro');
@@ -347,29 +410,27 @@
                 }
             }
 
-            titleEl.textContent = "Analisi Profili...";
-            descEl.textContent = "Cerco nomi e università.";
-            
+            document.getElementById('loading-title').textContent = "Analisi Profili...";
             setTimeout(() => {
                 const extracted = parseProfilesRobust(htmlText);
-                
                 if (extracted.length === 0) {
                     alert("Impossibile estrarre i dati. Usa 'Incolla Codice HTML'.");
                     showScreen('screen-intro');
                     return;
                 }
                 
-                appData.students = extracted;
-                renderReviewList();
+                // Tutti i nuovi estratti vengono messi in un gruppo sconosciuto per ora
+                extracted.forEach(s => s.group = 'unknown');
+                appData.baseStudents = extracted;
+                appData.removedIds.clear();
+                updateActiveDeck();
                 showScreen('screen-review');
             }, 500);
         }
 
         function loadManual() {
             const htmlText = document.getElementById('manual-html').value;
-            if (!htmlText || htmlText.trim().length < 50) {
-                return alert("Per favore, incolla prima tutto il codice HTML.");
-            }
+            if (!htmlText || htmlText.trim().length < 50) return alert("Incolla prima tutto il codice HTML.");
             
             showScreen('screen-loading');
             document.getElementById('loading-title').textContent = "Analisi HTML...";
@@ -381,9 +442,10 @@
                     showScreen('screen-intro');
                     return;
                 }
-                
-                appData.students = extracted;
-                renderReviewList();
+                extracted.forEach(s => s.group = 'unknown');
+                appData.baseStudents = extracted;
+                appData.removedIds.clear();
+                updateActiveDeck();
                 showScreen('screen-review');
             }, 300);
         }
@@ -393,7 +455,6 @@
             const doc = parser.parseFromString(htmlString, "text/html");
             const students = [];
             const seenNames = new Set();
-
             const images = doc.querySelectorAll('img');
             
             images.forEach(img => {
@@ -406,49 +467,88 @@
                 let card = img.closest('.elementor-column, .elementor-widget-wrap, .student-card, .wp-block-column');
                 if (!card) {
                     card = img.parentElement;
-                    for(let i=0; i<2; i++) {
-                        if (card && card.parentElement) card = card.parentElement;
-                    }
+                    for(let i=0; i<2; i++) if (card && card.parentElement) card = card.parentElement;
                 }
-                
                 if (!card) return;
 
                 const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, null, false);
                 let node;
                 const textChunks = [];
-                
                 while ((node = walker.nextNode())) {
                     const text = node.textContent.replace(/\s+/g, ' ').trim();
-                    if (text.length > 2) {
-                        textChunks.push(text);
-                    }
+                    if (text.length > 2) textChunks.push(text);
                 }
 
                 const uniqueTexts = [...new Set(textChunks)];
-                
                 if (uniqueTexts.length >= 2) {
                     let name = uniqueTexts[0];
                     let uni = uniqueTexts[1];
 
                     if (name.length < 50 && !seenNames.has(name)) {
                         seenNames.add(name);
-                        
                         if (imgSrc && imgSrc.includes(' ')) imgSrc = imgSrc.split(' ')[0];
                         if (!imgSrc.startsWith('http') && !imgSrc.startsWith('data:')) {
                             imgSrc = imgSrc.startsWith('/') ? 'https://www.elicsir.it' + imgSrc : 'https://www.elicsir.it/' + imgSrc;
                         }
-
-                        students.push({
-                            id: Math.random().toString(36).substr(2, 9),
-                            name: name,
-                            university: uni,
-                            image: imgSrc
-                        });
+                        students.push({ id: Math.random().toString(36).substr(2, 9), name: name, university: uni, image: imgSrc });
                     }
                 }
             });
-
             return students;
+        }
+
+        // ==========================================
+        // DECK & FILTERS LOGIC
+        // ==========================================
+        function toggleDocenti() {
+            appData.includeDocenti = document.getElementById('toggle-docenti').checked;
+            updateActiveDeck();
+        }
+
+        function toggleGroup(group) {
+            const btn = document.getElementById(`btn-group-${group}`);
+            let groupName = group === '1' ? "1° Ciclo" : (group === '2' ? "2° Ciclo" : "Contaminandi");
+            
+            if (appData.removedGroups.has(group)) {
+                // Reinserisci il gruppo
+                appData.removedGroups.delete(group);
+                btn.className = "px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm";
+                btn.innerHTML = `<span>${groupName}</span><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`;
+            } else {
+                // Rimuovi il gruppo
+                appData.removedGroups.add(group);
+                btn.className = "px-3 py-1.5 bg-stone-100 text-stone-500 text-[11px] sm:text-xs font-bold rounded-lg hover:bg-stone-200 transition-colors flex items-center gap-1";
+                btn.innerHTML = `<span>${groupName}</span><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>`;
+            }
+            updateActiveDeck();
+        }
+
+        function removeStudent(id) {
+            appData.removedIds.add(id);
+            updateActiveDeck();
+        }
+
+        function updateActiveDeck() {
+            let active = [...appData.baseStudents];
+            
+            if (appData.includeDocenti) {
+                active = [...active, ...STATIC_FACULTY];
+            }
+            
+            active = active.filter(s => !appData.removedGroups.has(s.group) && !appData.removedIds.has(s.id));
+            
+            appData.students = active;
+            renderReviewList();
+        }
+
+        function getRoleLabel(group) {
+            switch(group) {
+                case 'consiglio': return 'Consiglio';
+                case 'coordinamento': return 'Coordinamento';
+                case 'mentori': return 'Mentore';
+                case 'invitati': return 'Docente Invitato';
+                default: return 'Studente';
+            }
         }
 
         function renderReviewList() {
@@ -456,39 +556,43 @@
             const list = document.getElementById('review-list');
             
             if (appData.students.length === 0) {
-                list.innerHTML = '<div class="p-8 text-center text-stone-500 font-medium">Nessun profilo rimasto. Ricarica la pagina.</div>';
+                list.innerHTML = '<div class="p-8 text-center text-stone-500 font-medium">Nessun profilo rimasto nel mazzo.</div>';
                 return;
             }
             
-            list.innerHTML = appData.students.map(s => `
+            list.innerHTML = appData.students.map(s => {
+                const isFaculty = ['consiglio', 'coordinamento', 'mentori', 'invitati'].includes(s.group);
+                const roleBadge = isFaculty ? `<span class="px-1.5 py-0.5 bg-indigo-100 text-indigo-700 text-[9px] font-bold rounded uppercase">${getRoleLabel(s.group)}</span>` : '';
+                return `
                 <div class="flex items-center p-3 sm:p-4 hover:bg-orange-50/50 transition-colors">
                     <div class="shrink-0 w-10 h-14 sm:w-12 sm:h-16 relative mr-3 sm:mr-4">
-                        <img src="${s.image}" class="w-full h-full rounded-md object-cover object-top bg-stone-100 shadow-sm border border-stone-200" onerror="this.src='data:image/svg+xml;base64,...'">
+                        <img src="${s.image}" class="w-full h-full rounded-md object-cover object-top bg-stone-100 shadow-sm border border-stone-200" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2QxZDVkYiI+PHBhdGggZD0iTTEyIDEyYy0yLjc2IDEuNS01IDEuNS01IDMuNXYxdjFINWguNWgxM2guNXYtMXYtMWMwLTIuNS0yLjI0LTIuNS01LTMuNXptMC0xYTMuNSAzLjUgMCAxIDAgMC03IDMuNSAzLjUgMCAwIDAgMCA3eiIvPjwvc3ZnPg=='">
                     </div>
                     <div class="flex-1 min-w-0 pr-3 sm:pr-4">
-                        <h3 class="font-bold text-stone-800 leading-tight truncate text-xs sm:text-sm">${s.name}</h3>
+                        <div class="flex items-center gap-1">
+                            <h3 class="font-bold text-stone-800 leading-tight truncate text-xs sm:text-sm">${s.name}</h3>
+                            ${roleBadge}
+                        </div>
                         <p class="text-[10px] sm:text-xs text-stone-500 truncate mt-0.5">${s.university}</p>
                     </div>
                     <button onclick="removeStudent('${s.id}')" class="p-2 shrink-0 text-stone-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all" title="Rimuovi dal mazzo">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
-        function removeStudent(id) {
-            appData.students = appData.students.filter(s => s.id !== id);
-            renderReviewList();
-        }
-
+        // ==========================================
+        // GAME LOGIC
+        // ==========================================
         function startGame() {
-            if (appData.students.length === 0) return alert("Devi avere almeno uno studente nel mazzo!");
+            if (appData.students.length === 0) return alert("Devi avere almeno un profilo nel mazzo!");
             
             appData.deck = [...appData.students].sort(() => Math.random() - 0.5);
             appData.total = appData.students.length;
             appData.learned = 0;
             
-            // Inizia il timer
             clearInterval(appData.timerInterval);
             appData.secondsElapsed = 0;
             document.getElementById('game-timer').textContent = "00:00";
@@ -503,7 +607,6 @@
 
         function nextCard() {
             if (appData.deck.length === 0) {
-                // Fine del gioco, ferma il timer
                 clearInterval(appData.timerInterval);
                 document.getElementById('end-time').textContent = formatTime(appData.secondsElapsed);
                 showScreen('screen-end');
@@ -524,6 +627,7 @@
                 document.getElementById('card-back-img').src = appData.currentStudent.image;
                 document.getElementById('card-back-uni').textContent = appData.currentStudent.university;
                 document.getElementById('card-back-name').textContent = appData.currentStudent.name;
+                document.getElementById('card-back-role').textContent = getRoleLabel(appData.currentStudent.group);
             }, 150);
             
             updateProgress();
@@ -532,9 +636,7 @@
         function flipCard() {
             if (appData.isFlipped) return; 
             appData.isFlipped = true;
-            
             document.getElementById('flashcard-inner').classList.add('flipped');
-            
             setTimeout(() => {
                 const actions = document.getElementById('game-actions');
                 actions.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
@@ -544,9 +646,7 @@
 
         function handleAnswer(didKnow) {
             if (!appData.isFlipped) return;
-            
             const student = appData.deck.shift(); 
-            
             if (didKnow) {
                 appData.learned++;
             } else {
@@ -557,7 +657,6 @@
                     appData.deck.push(student);
                 }
             }
-            
             nextCard();
         }
 
@@ -565,7 +664,6 @@
             document.getElementById('game-learned').textContent = appData.learned;
             document.getElementById('game-total').textContent = appData.total;
             document.getElementById('game-remaining').textContent = appData.deck.length;
-            
             const percent = (appData.learned / appData.total) * 100;
             document.getElementById('game-progress-bar').style.width = `${percent}%`;
         }
@@ -573,7 +671,6 @@
         document.addEventListener('keydown', (e) => {
             const gameScreen = document.getElementById('screen-game');
             if (gameScreen.classList.contains('hidden')) return;
-            
             if (e.code === 'Space') {
                 e.preventDefault();
                 if (!appData.isFlipped) flipCard();
@@ -587,4 +684,3 @@
     </script>
 </body>
 </html>
-
