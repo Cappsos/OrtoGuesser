@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,32 +35,31 @@
                     <svg class="w-8 h-8 sm:w-10 sm:h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-stone-900 mb-2 sm:mb-3 tracking-tight">Orto<span class="text-orange-500">Guesser</span></h1>
-                <p class="text-stone-500 leading-relaxed text-xs sm:text-sm px-4">Learn the names of the students from Fondazione Elicsir.</p>
+                <p class="text-stone-500 leading-relaxed text-xs sm:text-sm px-4">Impara i nomi degli studenti della Fondazione Elicsir.</p>
             </div>
             
             <div class="space-y-3 sm:space-y-4">
                 <button onclick="loadViaProxy()" class="w-full group relative flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-4 bg-orange-500 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg shadow-orange-200 hover:bg-orange-600 active:scale-95 transition-all text-sm sm:text-base">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    <span>Auto-Fetch Data</span>
+                    <span>Recupera Dati</span>
                 </button>
                 
                 <div class="relative flex items-center py-2 opacity-60">
                     <div class="flex-grow border-t border-stone-300"></div>
-                    <span class="flex-shrink-0 mx-4 text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">OR</span>
+                    <span class="flex-shrink-0 mx-4 text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest">OPPURE</span>
                     <div class="flex-grow border-t border-stone-300"></div>
                 </div>
                 
                 <button onclick="toggleManual()" class="w-full py-3 sm:py-4 bg-white border border-stone-200 text-stone-600 rounded-xl sm:rounded-2xl font-bold shadow-sm hover:bg-stone-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    <span>Paste HTML Source</span>
+                    <span>Incolla Codice HTML</span>
                 </button>
             </div>
 
             <!-- Manual Input Drawer -->
             <div id="manual-paste-section" class="hidden mt-4 sm:mt-6 bg-stone-100 p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-stone-200 animate-fade-in">
-                <p class="text-[11px] sm:text-xs text-stone-500 mb-3 leading-relaxed">Go to <a href="https://www.elicsir.it/studenti" target="_blank" class="text-orange-500 font-bold hover:underline">elicsir.it/studenti</a>, press <kbd class="px-1 bg-stone-200 rounded">Ctrl+U</kbd> (View Source), copy all text, and paste it below.</p>
-                <textarea id="manual-html" class="w-full h-20 sm:h-28 p-3 text-xs font-mono bg-white border border-stone-300 rounded-lg sm:rounded-xl mb-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none shadow-inner" placeholder="Paste raw HTML here..."></textarea>
-                <button onclick="loadManual()" class="w-full py-2.5 sm:py-3 bg-stone-800 text-white rounded-lg sm:rounded-xl font-bold shadow-sm hover:bg-stone-900 active:scale-95 transition-all text-xs sm:text-sm">Parse Students</button>
+                <textarea id="manual-html" class="w-full h-20 sm:h-28 p-3 text-xs font-mono bg-white border border-stone-300 rounded-lg sm:rounded-xl mb-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none shadow-inner" placeholder="Incolla l'HTML qui..."></textarea>
+                <button onclick="loadManual()" class="w-full py-2.5 sm:py-3 bg-stone-800 text-white rounded-lg sm:rounded-xl font-bold shadow-sm hover:bg-stone-900 active:scale-95 transition-all text-xs sm:text-sm">Analizza Studenti</button>
             </div>
         </div>
 
@@ -69,23 +69,18 @@
                 <div class="absolute inset-0 rounded-full border-4 border-stone-200"></div>
                 <div class="absolute inset-0 rounded-full border-4 border-orange-500 border-t-transparent animate-spin"></div>
             </div>
-            <h3 class="text-base sm:text-lg font-bold text-stone-800 mb-1" id="loading-title">Connecting...</h3>
-            <p class="text-stone-500 text-xs sm:text-sm text-center" id="loading-desc">Attempting to fetch latest data.</p>
+            <h3 class="text-base sm:text-lg font-bold text-stone-800 mb-1" id="loading-title">Connessione...</h3>
+            <p class="text-stone-500 text-xs sm:text-sm text-center" id="loading-desc">Recupero dei dati più recenti.</p>
         </div>
 
         <!-- 3. REVIEW SCREEN -->
         <div id="screen-review" class="hidden flex-col h-full bg-stone-50 relative">
             <div class="p-4 sm:p-6 bg-white border-b border-stone-100 shrink-0 z-10 shadow-sm flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5 sm:mb-1">Review Deck</h2>
-                    <p class="text-xs sm:text-sm text-stone-500">Found <span id="review-count" class="font-bold text-orange-500">0</span> students.</p>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5 sm:mb-1">Il tuo Mazzo</h2>
+                    <p class="text-xs sm:text-sm text-stone-500">Trovati <span id="review-count" class="font-bold text-orange-500">0</span> studenti.</p>
                 </div>
-                
-                <!-- EXPORT BUTTON FOR GITHUB DEPLOYMENT -->
-                <button onclick="exportStaticData()" class="text-[10px] sm:text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-1.5 px-2.5 sm:py-2 sm:px-3 rounded-lg border border-orange-200 transition-colors flex items-center gap-1 sm:gap-1.5" title="Copy code to embed statically">
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                    Export
-                </button>
+                <!-- Export button rimosso come richiesto -->
             </div>
             
             <div id="review-list" class="flex-1 overflow-y-auto no-scrollbar divide-y divide-stone-100 bg-white">
@@ -95,7 +90,7 @@
             <div class="p-4 sm:p-6 bg-stone-50 border-t border-stone-200 shrink-0">
                 <button onclick="startGame()" class="w-full py-3.5 sm:py-4 bg-orange-500 text-white rounded-xl sm:rounded-2xl font-bold shadow-lg shadow-orange-200 hover:bg-orange-600 active:scale-95 transition-all text-base sm:text-lg flex items-center justify-center gap-2">
                     <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Start Game
+                    Inizia a Giocare!
                 </button>
             </div>
         </div>
@@ -106,11 +101,16 @@
             <div class="px-4 sm:px-6 py-4 sm:py-5 shrink-0 bg-white border-b border-stone-200">
                 <div class="flex justify-between items-end mb-2 sm:mb-3">
                     <div class="flex flex-col">
-                        <span class="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Learned</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Imparati</span>
                         <span class="text-base sm:text-lg font-extrabold text-stone-800"><span id="game-learned">0</span> <span class="text-stone-400 text-xs sm:text-sm font-medium">/ <span id="game-total">0</span></span></span>
                     </div>
+                    <!-- Timer -->
+                    <div class="flex flex-col items-center">
+                        <span class="text-[10px] sm:text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Tempo</span>
+                        <span class="text-base sm:text-lg font-extrabold text-stone-800" id="game-timer">00:00</span>
+                    </div>
                     <div class="flex flex-col items-end">
-                        <span class="text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-wider mb-0.5">In Deck</span>
+                        <span class="text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-wider mb-0.5">Nel mazzo</span>
                         <span class="text-base sm:text-lg font-extrabold text-orange-600" id="game-remaining">0</span>
                     </div>
                 </div>
@@ -122,33 +122,30 @@
             <!-- Flashcard Area (Scrollable if height is extremely small) -->
             <div class="flex-1 flex flex-col items-center justify-center p-4 min-h-0 overflow-y-auto no-scrollbar relative w-full">
                 <!-- The Card -->
-                <div class="w-[85vw] sm:w-full max-w-[280px] sm:max-w-[320px] aspect-[3/4] cursor-pointer perspective relative z-10 group shrink-0" onclick="flipCard()">
+                <div class="w-[90vw] sm:w-full max-w-[320px] sm:max-w-[360px] aspect-[3/4] cursor-pointer perspective relative z-10 group shrink-0" onclick="flipCard()">
                     <div id="flashcard-inner" class="relative w-full h-full transition-transform duration-500 preserve-3d">
                         
-                        <!-- Front (Image & Uni) -->
+                        <!-- Front (Solo Immagine Ingrandita) -->
                         <div class="absolute inset-0 backface-hidden bg-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-stone-200 flex flex-col p-3.5 sm:p-4 transform group-hover:-translate-y-1 transition-transform">
                             
-                            <div class="w-full h-[55%] sm:h-[60%] mb-3 sm:mb-4 relative rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 shadow-inner">
+                            <div class="w-full h-[85%] sm:h-[85%] mb-2 relative rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 shadow-inner flex items-center justify-center">
                                 <img id="card-front-img" src="" class="absolute inset-0 w-full h-full object-cover object-top z-10" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2QxZDVkYiI+PHBhdGggZD0iTTEyIDEyYy0yLjc2IDEuNS01IDEuNS01IDMuNXYxdjFINWguNWgxM2guNXYtMXYtMWMwLTIuNS0yLjI0LTIuNS01LTMuNXptMC0xYTMuNSAzLjUgMCAxIDAgMC03IDMuNSAzLjUgMCAwIDAgMCA3eiIvPjwvc3ZnPg=='">
                             </div>
                             
-                            <div class="flex-1 flex flex-col justify-center items-center text-center px-1">
-                                <h3 class="text-stone-400 font-bold text-[10px] sm:text-[11px] uppercase tracking-widest mb-1 sm:mb-1.5">University</h3>
-                                <p id="card-front-uni" class="text-stone-700 font-medium text-sm sm:text-base leading-snug line-clamp-3"></p>
-                            </div>
-                            
-                            <div class="mt-auto pt-2 text-[10px] sm:text-[11px] text-orange-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1 sm:gap-1.5 animate-pulse pb-0.5 sm:pb-1">
-                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                                Tap to flip
+                            <div class="mt-auto pt-1 text-[11px] sm:text-xs text-orange-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1 sm:gap-1.5 animate-pulse pb-1 sm:pb-2">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                Tocca per girare
                             </div>
                         </div>
 
-                        <!-- Back (Name) -->
+                        <!-- Back (Nome e Università) -->
                         <div class="absolute inset-0 backface-hidden bg-orange-500 text-white rounded-3xl sm:rounded-[2rem] shadow-[0_8px_30px_rgb(249,115,22,0.3)] flex flex-col items-center justify-center p-6 sm:p-8 text-center rotate-y-180 border border-orange-400">
-                            <p class="text-xs sm:text-sm font-bold text-orange-200 uppercase tracking-widest mb-2 sm:mb-3 drop-shadow-sm">Student Name</p>
-                            <h2 id="card-back-name" class="text-2xl sm:text-3xl font-extrabold mb-6 sm:mb-10 leading-tight drop-shadow-md"></h2>
+                            <p class="text-xs sm:text-sm font-bold text-orange-200 uppercase tracking-widest mb-1 sm:mb-2 drop-shadow-sm">Studente</p>
+                            <h2 id="card-back-name" class="text-3xl sm:text-4xl font-extrabold mb-2 leading-tight drop-shadow-md"></h2>
                             
-                            <div class="w-20 h-28 sm:w-24 sm:h-32 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner opacity-70 mix-blend-luminosity ring-2 ring-orange-300">
+                            <p id="card-back-uni" class="text-sm sm:text-base font-medium text-orange-100 mb-6 sm:mb-8 line-clamp-3 px-2"></p>
+                            
+                            <div class="w-20 h-28 sm:w-24 sm:h-32 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner opacity-70 mix-blend-luminosity ring-2 ring-orange-300 bg-white/20">
                                 <img id="card-back-img" src="" class="w-full h-full object-cover object-top">
                             </div>
                         </div>
@@ -156,20 +153,20 @@
                 </div>
 
                 <!-- Actions / Buttons -->
-                <div id="game-actions" class="w-[85vw] sm:w-full max-w-[280px] sm:max-w-[320px] flex gap-3 mt-4 sm:mt-6 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 shrink-0 pb-2">
-                    <button onclick="handleAnswer(false)" class="flex-1 py-3 sm:py-4 bg-white border-2 border-red-100 text-red-500 rounded-xl sm:rounded-2xl font-extrabold shadow-sm hover:bg-red-50 active:scale-95 transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mb-0.5 sm:mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        <span class="text-xs sm:text-sm">Study Again</span>
+                <div id="game-actions" class="w-[90vw] sm:w-full max-w-[320px] sm:max-w-[360px] flex gap-3 mt-4 sm:mt-6 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4 shrink-0 pb-2">
+                    <button onclick="handleAnswer(false)" class="flex-1 py-4 sm:py-5 bg-white border-2 border-red-100 text-red-500 rounded-xl sm:rounded-2xl font-extrabold shadow-sm hover:bg-red-50 active:scale-95 transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 mb-0.5 sm:mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="text-sm sm:text-base">Studia ancora</span>
                     </button>
-                    <button onclick="handleAnswer(true)" class="flex-1 py-3 sm:py-4 bg-emerald-500 text-white rounded-xl sm:rounded-2xl font-extrabold shadow-md shadow-emerald-200 hover:bg-emerald-600 active:scale-95 transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mb-0.5 sm:mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        <span class="text-xs sm:text-sm">Knew It</span>
+                    <button onclick="handleAnswer(true)" class="flex-1 py-4 sm:py-5 bg-emerald-500 text-white rounded-xl sm:rounded-2xl font-extrabold shadow-md shadow-emerald-200 hover:bg-emerald-600 active:scale-95 transition-all flex flex-col items-center justify-center gap-0.5 sm:gap-1">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 mb-0.5 sm:mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="text-sm sm:text-base">Lo sapevo!</span>
                     </button>
                 </div>
             </div>
             
             <div class="pb-4 sm:pb-6 pt-1 text-center text-[10px] sm:text-xs font-medium text-stone-400 hidden sm:block shrink-0">
-                Press <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">Space</kbd> to flip, <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">←</kbd> / <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">→</kbd> to answer
+                Premi <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">Spazio</kbd> per girare, <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">←</kbd> / <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">→</kbd> per rispondere
             </div>
         </div>
 
@@ -181,11 +178,16 @@
                 <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-full flex items-center justify-center mb-5 sm:mb-6 text-orange-500 shadow-2xl animate-bounce">
                     <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-extrabold mb-2 sm:mb-3 drop-shadow-md">Mastery Achieved!</h2>
-                <p class="text-orange-100 text-sm sm:text-lg mb-8 sm:mb-10 max-w-xs drop-shadow-sm">You've successfully learned all the students in the deck. Incredible memory!</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mb-2 sm:mb-3 drop-shadow-md">Completato!</h2>
+                <p class="text-orange-100 text-sm sm:text-lg mb-2 max-w-xs drop-shadow-sm">Hai imparato tutti gli studenti nel mazzo.</p>
+                
+                <div class="bg-orange-600 rounded-xl px-6 py-3 mb-8 sm:mb-10 shadow-inner">
+                    <p class="text-xs font-bold text-orange-200 uppercase tracking-widest mb-1">Tempo Totale</p>
+                    <p class="text-2xl font-extrabold text-white" id="end-time">00:00</p>
+                </div>
                 
                 <button onclick="startGame()" class="w-full max-w-xs py-3 sm:py-4 bg-white text-orange-600 rounded-xl sm:rounded-2xl font-extrabold shadow-xl hover:bg-stone-50 active:scale-95 transition-all text-base sm:text-lg mb-4">
-                    Play Again
+                    Gioca di nuovo
                 </button>
             </div>
         </div>
@@ -194,373 +196,69 @@
 
     <script>
         // =========================================================================
-        // STATIC DATA FOR GITHUB DEPLOYMENT
+        // DATI STATICI (Estratti)
         // =========================================================================
-        // After extracting the data once, paste it between these brackets.
-        // If this array has items, the app will skip fetching and load instantly!
         const STATIC_STUDENTS = [
-            
-    {
-        "id": "jr49uxos3",
-        "name": "Alberto Barbato",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/AlbertoBarbato-scaled-e1763931352929.jpeg?v=1.0.006"
-    },
-    {
-        "id": "nqa42ok9x",
-        "name": "Daniele Bignardi",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Daniele-Bignardi.jpg?v=1.0.006"
-    },
-    {
-        "id": "0lva749zf",
-        "name": "Ivan Buttignon",
-        "university": "Università degli Studi di Trieste",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Buttignon_Ivan.jpg?v=1.0.006"
-    },
-    {
-        "id": "gyxadl27f",
-        "name": "Nicolò Cappa",
-        "university": "Università degli Studi di Milano e Pavia",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicolo_Cappa.png?v=1.0.006"
-    },
-    {
-        "id": "xzonzh73e",
-        "name": "Manuel Cieri",
-        "university": "Università degli Studi di Salerno",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Manuel-Cieri.jpg?v=1.0.006"
-    },
-    {
-        "id": "wptv5k02q",
-        "name": "Umberto Crema",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Umbero-Crema.jpg?v=1.0.006"
-    },
-    {
-        "id": "elcr7oncm",
-        "name": "Marco Fasoli",
-        "university": "Università degli Studi di Genova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/MarcoFasoli.jpeg?v=1.0.006"
-    },
-    {
-        "id": "zp13vd0ex",
-        "name": "Sara Ferraro",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/SaraFerraro.jpg?v=1.0.006"
-    },
-    {
-        "id": "4qbmhvkbo",
-        "name": "Nicola Figus",
-        "university": "Università degli Studi di Cagliari",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicola-Figus.png?v=1.0.006"
-    },
-    {
-        "id": "owbhm3rtw",
-        "name": "Sara Giuriati",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giuriati_Sara_900x1200.jpg?v=1.0.006"
-    },
-    {
-        "id": "rufanlg96",
-        "name": "Monica Jin",
-        "university": "Politecnico di Torino",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Monica-Jin.jpg?v=1.0.006"
-    },
-    {
-        "id": "ycvspk2ue",
-        "name": "Samuele Manclossi",
-        "university": "Università degli Studi di Milano",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Samuele-Manclossi.png?v=1.0.006"
-    },
-    {
-        "id": "upvw8levl",
-        "name": "Geraldine Montella",
-        "university": "Università degli Studi di Salerno",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Geraldine_Montella.jpg?v=1.0.006"
-    },
-    {
-        "id": "1c3a3zi59",
-        "name": "Daniele Muscillo",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Daniele-Muscillo.png?v=1.0.006"
-    },
-    {
-        "id": "sr6bv76o9",
-        "name": "Elettra Palmisano",
-        "university": "Politecnico di Torino",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Elettra-Palmisano.jpg?v=1.0.006"
-    },
-    {
-        "id": "3xzvmtp13",
-        "name": "Sonia Sapia",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Sonia-Sapia.jpg?v=1.0.006"
-    },
-    {
-        "id": "up67zxeyn",
-        "name": "Enrico Savorgnan",
-        "university": "Università degli studi di Trieste",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Enrico-Savorgnan.jpg?v=1.0.006"
-    },
-    {
-        "id": "iafwt9xi5",
-        "name": "Samuel Seligardi",
-        "university": "Università degli Studi di Parma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Samuel-Seligardi.jpg?v=1.0.006"
-    },
-    {
-        "id": "f98cgyd3w",
-        "name": "Marco Tessari",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Marco-Tessari.jpg?v=1.0.006"
-    },
-    {
-        "id": "4rdlunj50",
-        "name": "Lisa Vecchi",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Lisa-Vecchi.jpeg?v=1.0.006"
-    },
-    {
-        "id": "xvuaom6oj",
-        "name": "Gianfranco Vitiello",
-        "university": "Università degli Studi di Salerno",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/GIANFRANCO_VITIELLO.jpg?v=1.0.006"
-    },
-    {
-        "id": "kt3am2eb0",
-        "name": "Samuele Artico",
-        "university": "Università di Pisa / Scuola Normale Superiore",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele_Artico-scaled.png?v=1.0.006"
-    },
-    {
-        "id": "0u80b0j1g",
-        "name": "Martyna Babiak",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/martycut.jpeg?v=1.0.006"
-    },
-    {
-        "id": "zmkxw53af",
-        "name": "Niccolò Ballardini",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/NICCOLO-BALLARDINI.jpeg?v=1.0.006"
-    },
-    {
-        "id": "tgykgj3r7",
-        "name": "Erica Benedetto",
-        "university": "Università di Pisa",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Erica-Benedetto.jpg?v=1.0.006"
-    },
-    {
-        "id": "6s4kp7zwr",
-        "name": "Alessandro Calderoni",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/calderoni.jpeg?v=1.0.006"
-    },
-    {
-        "id": "f2vhq453n",
-        "name": "Noemi Gambirasio",
-        "university": "Università degli Studi di Milano",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Noemi-Gambirasio.png?v=1.0.006"
-    },
-    {
-        "id": "8640wudqa",
-        "name": "Christian Kadiu",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Christian_Kadiu.jpg?v=1.0.006"
-    },
-    {
-        "id": "7gwly3ivu",
-        "name": "Elena Mannoni",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Elena-Mannoni.jpg?v=1.0.006"
-    },
-    {
-        "id": "er67bd1a9",
-        "name": "Mattia Marchesini",
-        "university": "Università di Pisa / Scuola Normale Superiore",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mattia_Marchesini-1.jpeg?v=1.0.006"
-    },
-    {
-        "id": "e76nr4f08",
-        "name": "Leonardo Meloni",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Leonardo-Meloni.jpg?v=1.0.006"
-    },
-    {
-        "id": "jwhnfnn6z",
-        "name": "Vittoria Mian",
-        "university": "Università degli Studi di Milano-Bicocca",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Vittoria_Mian-scaled.jpeg?v=1.0.006"
-    },
-    {
-        "id": "vkv3n4oyy",
-        "name": "Giulia Montagnani",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Giulia-Montagnani.png?v=1.0.006"
-    },
-    {
-        "id": "jyu8suqpf",
-        "name": "Samuele Maria Morreale",
-        "university": "Università degli Studi di Palermo",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele-Maria-Morreale.jpg?v=1.0.006"
-    },
-    {
-        "id": "vjwxu5c9k",
-        "name": "Federico Petucco",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/FedericoPetucco.jpg?v=1.0.006"
-    },
-    {
-        "id": "4jgpbu8so",
-        "name": "Beatrice Pomi",
-        "university": "Università degli Studi di Milano-Bicocca",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Beatrice-Pomi-scaled-e1762162237544.png?v=1.0.006"
-    },
-    {
-        "id": "jbv0ycuko",
-        "name": "Maristella Rega",
-        "university": "Università degli Studi di Salerno",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Maristella-Rega.png?v=1.0.006"
-    },
-    {
-        "id": "7cvd19fxv",
-        "name": "Ettore Sozzi",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Ettore_Sozzi-scaled.jpg?v=1.0.006"
-    },
-    {
-        "id": "y5fcpvn1w",
-        "name": "Andrea Squitieri",
-        "university": "Università degli Studi di Salerno",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Andrea-Squitieri.png?v=1.0.006"
-    },
-    {
-        "id": "pk2nw2eyw",
-        "name": "Mirco Tucci",
-        "university": "Politecnico di Torino",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mirco-Tucci.jpg?v=1.0.006"
-    },
-    {
-        "id": "zmvph2uz9",
-        "name": "Stefano Zanon",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Stefano-Zanon.jpg?v=1.0.006"
-    },
-    {
-        "id": "228dcmkqf",
-        "name": "Giulia Beraldo",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giulia-Beraldo.jpg?v=1.0.006"
-    },
-    {
-        "id": "yl9suc3j8",
-        "name": "Matteo Canton",
-        "university": "Università degli Studi di Udine",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Matteo-Canton.jpg?v=1.0.006"
-    },
-    {
-        "id": "txwwffpt1",
-        "name": "Ludovico Cappellato",
-        "university": "Università degli Studi di Trento",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Ludovico-Cappellato-scaled-1.jpg?v=1.0.006"
-    },
-    {
-        "id": "k763l47fo",
-        "name": "Riccardo Chimisso",
-        "university": "Università degli Studi di Milano-Bicocca",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Riccardo-Chimisso-scaled.jpg?v=1.0.006"
-    },
-    {
-        "id": "8pg53j6gq",
-        "name": "Antonella Coviello",
-        "university": "Politecnico di Torino- Alta Scuola Politecnica",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Antonella-Coviello.jpg?v=1.0.006"
-    },
-    {
-        "id": "npa9h8dh4",
-        "name": "Alessandro Dario",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alessandro-Dario.jpg?v=1.0.006"
-    },
-    {
-        "id": "me0vc23c3",
-        "name": "Veronica Di Gennaro",
-        "university": "Politecnico di Milano",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Veronica-Di-Gennaro-scaled.jpg?v=1.0.006"
-    },
-    {
-        "id": "u7j15a211",
-        "name": "Filippo Garagnani",
-        "university": "Università di Modena e Reggio Emilia",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/1000240937.jpg?v=1.0.006"
-    },
-    {
-        "id": "bitpkppu2",
-        "name": "Francesco Giordani",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Francesco-Giordani.jpeg?v=1.0.006"
-    },
-    {
-        "id": "zyabsar24",
-        "name": "Nancy Kalaj",
-        "university": "Università degli Studi di Trento",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Nancy-Kalaj.jpg?v=1.0.006"
-    },
-    {
-        "id": "zj22rw7os",
-        "name": "Federico Mingardi",
-        "university": "Sapienza Università di Roma",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Federico-Mingardi.jpg?v=1.0.006"
-    },
-    {
-        "id": "tzot8s2cy",
-        "name": "Silvia Mondin",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Silvia-Mondin.jpg?v=1.0.006"
-    },
-    {
-        "id": "8pctx1ol6",
-        "name": "Simone Moretti",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Simone_Moretti-1.jpg?v=1.0.006"
-    },
-    {
-        "id": "ym0j0on4g",
-        "name": "Dario Moschetti",
-        "university": "Università degli Studi di Milano",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Dario-Moschetti.png?v=1.0.006"
-    },
-    {
-        "id": "z3nnvf9bg",
-        "name": "Carlotta Nunziati",
-        "university": "Università di Bologna",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/CarlottaNunziati.png?v=1.0.006"
-    },
-    {
-        "id": "tfnvycaa8",
-        "name": "Marco Simoncini",
-        "university": "Politecnico di Torino",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Marco-Simoncini.jpg?v=1.0.006"
-    },
-    {
-        "id": "fn3bzvqj8",
-        "name": "Kristjan Tarantelli",
-        "university": "Sapienza- Scuola di Studi Avanzati",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Kristjan-Tarantelli.png?v=1.0.006"
-    },
-    {
-        "id": "g300ygfgw",
-        "name": "Alberto Vendramini",
-        "university": "Università degli Studi di Trento",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alberto-Vendramini.jpg?v=1.0.006"
-    },
-    {
-        "id": "w8dxzx6cp",
-        "name": "Francesco Visonà",
-        "university": "Università degli Studi di Padova",
-        "image": "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Francesco-Visona.jpg?v=1.0.006"
-    }
-
+            { id: "jr49uxos3", name: "Alberto Barbato", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/AlbertoBarbato-scaled-e1763931352929.jpeg?v=1.0.006" },
+            { id: "nqa42ok9x", name: "Daniele Bignardi", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Daniele-Bignardi.jpg?v=1.0.006" },
+            { id: "0lva749zf", name: "Ivan Buttignon", university: "Università degli Studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Buttignon_Ivan.jpg?v=1.0.006" },
+            { id: "gyxadl27f", name: "Nicolò Cappa", university: "Università degli Studi di Milano e Pavia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicolo_Cappa.png?v=1.0.006" },
+            { id: "xzonzh73e", name: "Manuel Cieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Manuel-Cieri.jpg?v=1.0.006" },
+            { id: "wptv5k02q", name: "Umberto Crema", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Umbero-Crema.jpg?v=1.0.006" },
+            { id: "elcr7oncm", name: "Marco Fasoli", university: "Università degli Studi di Genova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/MarcoFasoli.jpeg?v=1.0.006" },
+            { id: "zp13vd0ex", name: "Sara Ferraro", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/SaraFerraro.jpg?v=1.0.006" },
+            { id: "4qbmhvkbo", name: "Nicola Figus", university: "Università degli Studi di Cagliari", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Nicola-Figus.png?v=1.0.006" },
+            { id: "owbhm3rtw", name: "Sara Giuriati", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giuriati_Sara_900x1200.jpg?v=1.0.006" },
+            { id: "rufanlg96", name: "Monica Jin", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Monica-Jin.jpg?v=1.0.006" },
+            { id: "ycvspk2ue", name: "Samuele Manclossi", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Samuele-Manclossi.png?v=1.0.006" },
+            { id: "upvw8levl", name: "Geraldine Montella", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Geraldine_Montella.jpg?v=1.0.006" },
+            { id: "1c3a3zi59", name: "Daniele Muscillo", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Daniele-Muscillo.png?v=1.0.006" },
+            { id: "sr6bv76o9", name: "Elettra Palmisano", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Elettra-Palmisano.jpg?v=1.0.006" },
+            { id: "3xzvmtp13", name: "Sonia Sapia", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Sonia-Sapia.jpg?v=1.0.006" },
+            { id: "up67zxeyn", name: "Enrico Savorgnan", university: "Università degli studi di Trieste", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Enrico-Savorgnan.jpg?v=1.0.006" },
+            { id: "iafwt9xi5", name: "Samuel Seligardi", university: "Università degli Studi di Parma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Samuel-Seligardi.jpg?v=1.0.006" },
+            { id: "f98cgyd3w", name: "Marco Tessari", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Marco-Tessari.jpg?v=1.0.006" },
+            { id: "4rdlunj50", name: "Lisa Vecchi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Lisa-Vecchi.jpeg?v=1.0.006" },
+            { id: "xvuaom6oj", name: "Gianfranco Vitiello", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/GIANFRANCO_VITIELLO.jpg?v=1.0.006" },
+            { id: "kt3am2eb0", name: "Samuele Artico", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele_Artico-scaled.png?v=1.0.006" },
+            { id: "0u80b0j1g", name: "Martyna Babiak", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/martycut.jpeg?v=1.0.006" },
+            { id: "zmkxw53af", name: "Niccolò Ballardini", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/NICCOLO-BALLARDINI.jpeg?v=1.0.006" },
+            { id: "tgykgj3r7", name: "Erica Benedetto", university: "Università di Pisa", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Erica-Benedetto.jpg?v=1.0.006" },
+            { id: "6s4kp7zwr", name: "Alessandro Calderoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/calderoni.jpeg?v=1.0.006" },
+            { id: "f2vhq453n", name: "Noemi Gambirasio", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Noemi-Gambirasio.png?v=1.0.006" },
+            { id: "8640wudqa", name: "Christian Kadiu", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Christian_Kadiu.jpg?v=1.0.006" },
+            { id: "7gwly3ivu", name: "Elena Mannoni", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Elena-Mannoni.jpg?v=1.0.006" },
+            { id: "er67bd1a9", name: "Mattia Marchesini", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mattia_Marchesini-1.jpeg?v=1.0.006" },
+            { id: "e76nr4f08", name: "Leonardo Meloni", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Leonardo-Meloni.jpg?v=1.0.006" },
+            { id: "jwhnfnn6z", name: "Vittoria Mian", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Vittoria_Mian-scaled.jpeg?v=1.0.006" },
+            { id: "vkv3n4oyy", name: "Giulia Montagnani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Giulia-Montagnani.png?v=1.0.006" },
+            { id: "jyu8suqpf", name: "Samuele Maria Morreale", university: "Università degli Studi di Palermo", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele-Maria-Morreale.jpg?v=1.0.006" },
+            { id: "vjwxu5c9k", name: "Federico Petucco", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/FedericoPetucco.jpg?v=1.0.006" },
+            { id: "4jgpbu8so", name: "Beatrice Pomi", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Beatrice-Pomi-scaled-e1762162237544.png?v=1.0.006" },
+            { id: "jbv0ycuko", name: "Maristella Rega", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Maristella-Rega.png?v=1.0.006" },
+            { id: "7cvd19fxv", name: "Ettore Sozzi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Ettore_Sozzi-scaled.jpg?v=1.0.006" },
+            { id: "y5fcpvn1w", name: "Andrea Squitieri", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Andrea-Squitieri.png?v=1.0.006" },
+            { id: "pk2nw2eyw", name: "Mirco Tucci", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Mirco-Tucci.jpg?v=1.0.006" },
+            { id: "zmvph2uz9", name: "Stefano Zanon", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Stefano-Zanon.jpg?v=1.0.006" },
+            { id: "228dcmkqf", name: "Giulia Beraldo", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Giulia-Beraldo.jpg?v=1.0.006" },
+            { id: "yl9suc3j8", name: "Matteo Canton", university: "Università degli Studi di Udine", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Matteo-Canton.jpg?v=1.0.006" },
+            { id: "txwwffpt1", name: "Ludovico Cappellato", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Ludovico-Cappellato-scaled-1.jpg?v=1.0.006" },
+            { id: "k763l47fo", name: "Riccardo Chimisso", university: "Università degli Studi di Milano-Bicocca", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Riccardo-Chimisso-scaled.jpg?v=1.0.006" },
+            { id: "8pg53j6gq", name: "Antonella Coviello", university: "Politecnico di Torino- Alta Scuola Politecnica", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Antonella-Coviello.jpg?v=1.0.006" },
+            { id: "npa9h8dh4", name: "Alessandro Dario", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alessandro-Dario.jpg?v=1.0.006" },
+            { id: "me0vc23c3", name: "Veronica Di Gennaro", university: "Politecnico di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Veronica-Di-Gennaro-scaled.jpg?v=1.0.006" },
+            { id: "u7j15a211", name: "Filippo Garagnani", university: "Università di Modena e Reggio Emilia", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/1000240937.jpg?v=1.0.006" },
+            { id: "bitpkppu2", name: "Francesco Giordani", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Francesco-Giordani.jpeg?v=1.0.006" },
+            { id: "zyabsar24", name: "Nancy Kalaj", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Nancy-Kalaj.jpg?v=1.0.006" },
+            { id: "zj22rw7os", name: "Federico Mingardi", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Federico-Mingardi.jpg?v=1.0.006" },
+            { id: "tzot8s2cy", name: "Silvia Mondin", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Silvia-Mondin.jpg?v=1.0.006" },
+            { id: "8pctx1ol6", name: "Simone Moretti", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Simone_Moretti-1.jpg?v=1.0.006" },
+            { id: "ym0j0on4g", name: "Dario Moschetti", university: "Università degli Studi di Milano", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Dario-Moschetti.png?v=1.0.006" },
+            { id: "z3nnvf9bg", name: "Carlotta Nunziati", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/CarlottaNunziati.png?v=1.0.006" },
+            { id: "tfnvycaa8", name: "Marco Simoncini", university: "Politecnico di Torino", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Marco-Simoncini.jpg?v=1.0.006" },
+            { id: "fn3bzvqj8", name: "Kristjan Tarantelli", university: "Sapienza- Scuola di Studi Avanzati", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Kristjan-Tarantelli.png?v=1.0.006" },
+            { id: "g300ygfgw", name: "Alberto Vendramini", university: "Università degli Studi di Trento", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Alberto-Vendramini.jpg?v=1.0.006" },
+            { id: "w8dxzx6cp", name: "Francesco Visonà", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/09/Francesco-Visona.jpg?v=1.0.006" }
         ];
         // =========================================================================
 
@@ -570,8 +268,17 @@
             learned: 0,
             total: 0,
             currentStudent: null,
-            isFlipped: false
+            isFlipped: false,
+            timerInterval: null,
+            secondsElapsed: 0
         };
+
+        // Funzione per formattare il timer (essenziale per far avviare il gioco!)
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
 
         // App Initialization
         window.onload = () => {
@@ -608,39 +315,6 @@
             }
         }
 
-        // --- Export Feature for GitHub ---
-        function exportStaticData() {
-            const jsonText = JSON.stringify(appData.students, null, 4);
-            
-            // Try clipboard API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(jsonText).then(() => {
-                    alert("✅ Data copied to clipboard!\n\nOpen your index.html file, find the 'STATIC_STUDENTS' array near the bottom, and paste the data inside the brackets. Then deploy to GitHub!");
-                }).catch(() => fallbackCopy(jsonText));
-            } else {
-                fallbackCopy(jsonText);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                alert("✅ Data copied to clipboard!\n\nOpen your index.html file, find the 'STATIC_STUDENTS' array near the bottom, and paste the data inside the brackets. Then deploy to GitHub!");
-            } catch (err) {
-                alert("Auto-copy failed. Please check the browser console to copy the JSON manually.");
-                console.log("PASTE THIS INTO STATIC_STUDENTS ARRAY:\n\n", text);
-            }
-            document.body.removeChild(textArea);
-        }
-
         async function loadViaProxy() {
             showScreen('screen-loading');
             const titleEl = document.getElementById('loading-title');
@@ -650,7 +324,7 @@
             let htmlText = '';
             
             try {
-                titleEl.textContent = "Trying Primary Proxy...";
+                titleEl.textContent = "Tentativo Proxy 1...";
                 const res1 = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`);
                 if (res1.ok) {
                     htmlText = await res1.text();
@@ -659,7 +333,7 @@
                 }
             } catch (e1) {
                 try {
-                    titleEl.textContent = "Trying Backup Proxy...";
+                    titleEl.textContent = "Tentativo Proxy 2...";
                     const res2 = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
                     if (res2.ok) {
                         const data = await res2.json();
@@ -668,20 +342,20 @@
                         throw new Error("Proxy 2 failed");
                     }
                 } catch (e2) {
-                    alert("Network Error: Both proxies were blocked by the website. Please click 'Paste HTML Source'.");
+                    alert("Errore di Rete: I proxy sono bloccati. Clicca su 'Incolla Codice HTML'.");
                     showScreen('screen-intro');
                     return;
                 }
             }
 
-            titleEl.textContent = "Parsing Profiles...";
-            descEl.textContent = "Finding names and universities.";
+            titleEl.textContent = "Analisi Profili...";
+            descEl.textContent = "Cerco nomi e università.";
             
             setTimeout(() => {
                 const extracted = parseProfilesRobust(htmlText);
                 
                 if (extracted.length === 0) {
-                    alert("Website blocked content extraction. Please use 'Paste HTML Source' instead.");
+                    alert("Impossibile estrarre i dati. Usa 'Incolla Codice HTML'.");
                     showScreen('screen-intro');
                     return;
                 }
@@ -695,16 +369,16 @@
         function loadManual() {
             const htmlText = document.getElementById('manual-html').value;
             if (!htmlText || htmlText.trim().length < 50) {
-                return alert("Please paste the full HTML source code first.");
+                return alert("Per favore, incolla prima tutto il codice HTML.");
             }
             
             showScreen('screen-loading');
-            document.getElementById('loading-title').textContent = "Parsing HTML...";
+            document.getElementById('loading-title').textContent = "Analisi HTML...";
             
             setTimeout(() => {
                 const extracted = parseProfilesRobust(htmlText);
                 if (extracted.length === 0) {
-                    alert("Could not find student profiles. Ensure you copied raw HTML (Ctrl+U).");
+                    alert("Nessun profilo trovato. Assicurati di aver incollato il codice HTML grezzo (Ctrl+U).");
                     showScreen('screen-intro');
                     return;
                 }
@@ -783,7 +457,7 @@
             const list = document.getElementById('review-list');
             
             if (appData.students.length === 0) {
-                list.innerHTML = '<div class="p-8 text-center text-stone-500 font-medium">No valid profiles remaining. Go back and reload.</div>';
+                list.innerHTML = '<div class="p-8 text-center text-stone-500 font-medium">Nessun profilo rimasto. Ricarica la pagina.</div>';
                 return;
             }
             
@@ -796,7 +470,7 @@
                         <h3 class="font-bold text-stone-800 leading-tight truncate text-xs sm:text-sm">${s.name}</h3>
                         <p class="text-[10px] sm:text-xs text-stone-500 truncate mt-0.5">${s.university}</p>
                     </div>
-                    <button onclick="removeStudent('${s.id}')" class="p-2 shrink-0 text-stone-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all" title="Remove from deck">
+                    <button onclick="removeStudent('${s.id}')" class="p-2 shrink-0 text-stone-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all" title="Rimuovi dal mazzo">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                 </div>
@@ -815,6 +489,7 @@
             appData.total = appData.students.length;
             appData.learned = 0;
             
+            // Inizia il timer
             clearInterval(appData.timerInterval);
             appData.secondsElapsed = 0;
             document.getElementById('game-timer').textContent = "00:00";
@@ -829,6 +504,7 @@
 
         function nextCard() {
             if (appData.deck.length === 0) {
+                // Fine del gioco, ferma il timer
                 clearInterval(appData.timerInterval);
                 document.getElementById('end-time').textContent = formatTime(appData.secondsElapsed);
                 showScreen('screen-end');
@@ -912,3 +588,4 @@
     </script>
 </body>
 </html>
+
