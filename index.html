@@ -448,11 +448,19 @@
         }
 
         function startGame() {
-            if (appData.students.length === 0) return alert("You must have at least one student in the deck!");
+            if (appData.students.length === 0) return alert("Devi avere almeno uno studente nel mazzo!");
             
             appData.deck = [...appData.students].sort(() => Math.random() - 0.5);
             appData.total = appData.students.length;
             appData.learned = 0;
+            
+            clearInterval(appData.timerInterval);
+            appData.secondsElapsed = 0;
+            document.getElementById('game-timer').textContent = "00:00";
+            appData.timerInterval = setInterval(() => {
+                appData.secondsElapsed++;
+                document.getElementById('game-timer').textContent = formatTime(appData.secondsElapsed);
+            }, 1000);
             
             showScreen('screen-game');
             nextCard();
@@ -460,6 +468,8 @@
 
         function nextCard() {
             if (appData.deck.length === 0) {
+                clearInterval(appData.timerInterval);
+                document.getElementById('end-time').textContent = formatTime(appData.secondsElapsed);
                 showScreen('screen-end');
                 return;
             }
@@ -476,7 +486,7 @@
             setTimeout(() => {
                 document.getElementById('card-front-img').src = appData.currentStudent.image;
                 document.getElementById('card-back-img').src = appData.currentStudent.image;
-                document.getElementById('card-front-uni').textContent = appData.currentStudent.university;
+                document.getElementById('card-back-uni').textContent = appData.currentStudent.university;
                 document.getElementById('card-back-name').textContent = appData.currentStudent.name;
             }, 150);
             
