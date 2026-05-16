@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OrtoGuesser | Elicsir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS for 3D flip animations */
+        .perspective { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flipped { transform: rotateY(180deg); }
+        
+        /* Hide scrollbar for review list but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        body { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-orange-50/30 text-slate-800 font-sans h-screen w-screen overflow-hidden flex flex-col">
+
+    <!-- App Container -->
+    <div id="app" class="w-full max-w-md mx-auto h-full relative flex flex-col bg-stone-50 md:border-x md:border-stone-200 md:shadow-2xl overflow-hidden">
+        
+        <!-- 1. INTRO SCREEN -->
+        <div id="screen-intro" class="hidden flex-col h-full justify-center px-6 pb-12 overflow-y-auto">
+            <div class="text-center mb-10 pt-10">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-orange-100 rounded-3xl mb-6 shadow-inner border border-orange-200">
+                    <!-- Sprout/Leaf Icon for "Orto" -->
+                    <svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                </div>
+                <h1 class="text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Orto<span class="text-orange-500">Guesser</span></h1>
+                <p class="text-stone-500 leading-relaxed text-sm">Learn the names of the students from Fondazione Elicsir.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <button onclick="loadViaProxy()" class="w-full group relative flex items-center justify-center gap-3 py-4 bg-orange-500 text-white rounded-2xl font-bold shadow-lg shadow-orange-200 hover:bg-orange-600 active:scale-95 transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    <span>Auto-Fetch Data</span>
+                </button>
+                
+                <div class="relative flex items-center py-3 opacity-60">
+                    <div class="flex-grow border-t border-stone-300"></div>
+                    <span class="flex-shrink-0 mx-4 text-stone-400 text-xs font-bold uppercase tracking-widest">OR</span>
+                    <div class="flex-grow border-t border-stone-300"></div>
+                </div>
+                
+                <button onclick="toggleManual()" class="w-full py-4 bg-white border border-stone-200 text-stone-600 rounded-2xl font-bold shadow-sm hover:bg-stone-50 active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    <span>Paste HTML Source</span>
+                </button>
+            </div>
+
+            <!-- Manual Input Drawer -->
+            <div id="manual-paste-section" class="hidden mt-6 bg-stone-100 p-5 rounded-2xl border border-stone-200 animate-fade-in">
+                <p class="text-xs text-stone-500 mb-3 leading-relaxed">Go to <a href="https://www.elicsir.it/studenti" target="_blank" class="text-orange-500 font-bold hover:underline">elicsir.it/studenti</a>, press <kbd class="px-1 bg-stone-200 rounded">Ctrl+U</kbd> (View Source), copy all text, and paste it below.</p>
+                <textarea id="manual-html" class="w-full h-28 p-3 text-xs font-mono bg-white border border-stone-300 rounded-xl mb-3 focus:ring-2 focus:ring-orange-400 outline-none resize-none shadow-inner" placeholder="Paste raw HTML here..."></textarea>
+                <button onclick="loadManual()" class="w-full py-3 bg-stone-800 text-white rounded-xl font-bold shadow-sm hover:bg-stone-900 active:scale-95 transition-all text-sm">Parse Students</button>
+            </div>
+        </div>
+
+        <!-- 2. LOADING SCREEN -->
+        <div id="screen-loading" class="hidden flex-col h-full items-center justify-center px-6">
+            <div class="relative w-16 h-16 mb-6">
+                <div class="absolute inset-0 rounded-full border-4 border-stone-200"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-orange-500 border-t-transparent animate-spin"></div>
+            </div>
+            <h3 class="text-lg font-bold text-stone-800 mb-1" id="loading-title">Connecting...</h3>
+            <p class="text-stone-500 text-sm text-center" id="loading-desc">Attempting to fetch latest data.</p>
+        </div>
+
+        <!-- 3. REVIEW SCREEN -->
+        <div id="screen-review" class="hidden flex-col h-full bg-stone-50 relative">
+            <div class="p-6 bg-white border-b border-stone-100 shrink-0 z-10 shadow-sm flex justify-between items-start">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-stone-800 mb-1">Review Deck</h2>
+                    <p class="text-sm text-stone-500">Found <span id="review-count" class="font-bold text-orange-500">0</span> students.</p>
+                </div>
+                
+                <!-- NEW: EXPORT BUTTON FOR GITHUB DEPLOYMENT -->
+                <button onclick="exportStaticData()" class="text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-2 px-3 rounded-lg border border-orange-200 transition-colors flex items-center gap-1.5" title="Copy code to embed statically">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    Export
+                </button>
+            </div>
+            
+            <div id="review-list" class="flex-1 overflow-y-auto no-scrollbar divide-y divide-stone-100 bg-white">
+                <!-- Javascript will render items here -->
+            </div>
+            
+            <div class="p-6 bg-stone-50 border-t border-stone-200 shrink-0">
+                <button onclick="startGame()" class="w-full py-4 bg-orange-500 text-white rounded-2xl font-bold shadow-lg shadow-orange-200 hover:bg-orange-600 active:scale-95 transition-all text-lg flex items-center justify-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Start Game
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. GAME SCREEN -->
+        <div id="screen-game" class="hidden flex-col h-full relative">
+            <!-- Header / Progress bar -->
+            <div class="px-6 py-5 shrink-0 bg-white border-b border-stone-200">
+                <div class="flex justify-between items-end mb-3">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-0.5">Learned</span>
+                        <span class="text-lg font-extrabold text-stone-800"><span id="game-learned">0</span> <span class="text-stone-400 text-sm font-medium">/ <span id="game-total">0</span></span></span>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wider mb-0.5">In Deck</span>
+                        <span class="text-lg font-extrabold text-orange-600" id="game-remaining">0</span>
+                    </div>
+                </div>
+                <div class="w-full bg-stone-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="game-progress-bar" class="bg-gradient-to-r from-orange-400 to-orange-500 h-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Flashcard Area -->
+            <div class="flex-1 flex flex-col items-center justify-center p-6 pb-2 relative">
+                <!-- The Card -->
+                <div class="w-full max-w-sm aspect-[3/4] cursor-pointer perspective relative z-10 group" onclick="flipCard()">
+                    <div id="flashcard-inner" class="relative w-full h-full transition-transform duration-500 preserve-3d">
+                        
+                        <!-- Front (Image & Uni) -->
+                        <div class="absolute inset-0 backface-hidden bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-stone-200 flex flex-col p-4 transform group-hover:-translate-y-1 transition-transform">
+                            
+                            <div class="w-full h-[65%] mb-4 relative rounded-2xl overflow-hidden bg-stone-100 shadow-inner">
+                                <img id="card-front-img" src="" class="absolute inset-0 w-full h-full object-cover object-top z-10" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2QxZDVkYiI+PHBhdGggZD0iTTEyIDEyYy0yLjc2IDEuNS01IDEuNS01IDMuNXYxdjFINWguNWgxM2guNXYtMXYtMWMwLTIuNS0yLjI0LTIuNS01LTMuNXptMC0xYTMuNSAzLjUgMCAxIDAgMC03IDMuNSAzLjUgMCAwIDAgMCA3eiIvPjwvc3ZnPg=='">
+                            </div>
+                            
+                            <div class="flex-1 flex flex-col justify-center items-center text-center px-2">
+                                <h3 class="text-stone-400 font-bold text-[11px] uppercase tracking-widest mb-1.5">University / Affiliation</h3>
+                                <p id="card-front-uni" class="text-stone-700 font-medium text-[17px] leading-snug line-clamp-3"></p>
+                            </div>
+                            
+                            <div class="mt-auto pt-2 text-[11px] text-orange-400 font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 animate-pulse pb-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                                Tap to reveal name
+                            </div>
+                        </div>
+
+                        <!-- Back (Name) -->
+                        <div class="absolute inset-0 backface-hidden bg-orange-500 text-white rounded-[2rem] shadow-[0_8px_30px_rgb(249,115,22,0.3)] flex flex-col items-center justify-center p-8 text-center rotate-y-180 border border-orange-400">
+                            <p class="text-sm font-bold text-orange-200 uppercase tracking-widest mb-3 drop-shadow-sm">Student Name</p>
+                            <h2 id="card-back-name" class="text-4xl font-extrabold mb-10 leading-tight drop-shadow-md"></h2>
+                            
+                            <div class="w-24 h-32 rounded-2xl overflow-hidden shadow-inner opacity-70 mix-blend-luminosity ring-2 ring-orange-300">
+                                <img id="card-back-img" src="" class="w-full h-full object-cover object-top">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions / Buttons -->
+                <div id="game-actions" class="w-full max-w-sm flex gap-4 mt-6 opacity-0 pointer-events-none transition-all duration-300 transform translate-y-4">
+                    <button onclick="handleAnswer(false)" class="flex-1 py-4 bg-white border-2 border-red-100 text-red-500 rounded-2xl font-extrabold shadow-sm hover:bg-red-50 active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span>Study Again</span>
+                    </button>
+                    <button onclick="handleAnswer(true)" class="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-extrabold shadow-md shadow-emerald-200 hover:bg-emerald-600 active:scale-95 transition-all flex flex-col items-center justify-center gap-1">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Knew It</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="pb-6 pt-2 text-center text-xs font-medium text-stone-400 hidden sm:block">
+                Press <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">Space</kbd> to flip, <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">←</kbd> / <kbd class="bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200 text-stone-500 shadow-sm">→</kbd> to answer
+            </div>
+        </div>
+
+        <!-- 5. END SCREEN -->
+        <div id="screen-end" class="hidden flex-col h-full items-center justify-center text-center p-8 bg-orange-500 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 30px 30px;"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-6 text-orange-500 shadow-2xl animate-bounce">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="text-4xl font-extrabold mb-3 drop-shadow-md">Mastery Achieved!</h2>
+                <p class="text-orange-100 text-lg mb-10 max-w-xs drop-shadow-sm">You've successfully learned all the students in the deck. Incredible memory!</p>
+                
+                <button onclick="startGame()" class="w-full max-w-xs py-4 bg-white text-orange-600 rounded-2xl font-extrabold shadow-xl hover:bg-stone-50 active:scale-95 transition-all text-lg mb-4">
+                    Play Again
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // =========================================================================
+        // STATIC DATA FOR GITHUB DEPLOYMENT
+        // =========================================================================
+        // After extracting the data once, paste it between these brackets.
+        // If this array has items, the app will skip fetching and load instantly!
+        const STATIC_STUDENTS = [
+            
+        ];
+        // =========================================================================
+
+        const appData = {
+            students: [],
+            deck: [],
+            learned: 0,
+            total: 0,
+            currentStudent: null,
+            isFlipped: false
+        };
+
+        // App Initialization
+        window.onload = () => {
+            if (STATIC_STUDENTS && STATIC_STUDENTS.length > 0) {
+                // Instantly load static data
+                appData.students = [...STATIC_STUDENTS];
+                renderReviewList();
+                showScreen('screen-review');
+            } else {
+                // Show intro screen to fetch data
+                showScreen('screen-intro');
+            }
+        };
+
+        function showScreen(screenId) {
+            const screens = ['screen-intro', 'screen-loading', 'screen-review', 'screen-game', 'screen-end'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === screenId) {
+                    el.classList.remove('hidden');
+                    el.classList.add('flex');
+                } else {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+        }
+
+        function toggleManual() {
+            const el = document.getElementById('manual-paste-section');
+            el.classList.toggle('hidden');
+            if (!el.classList.contains('hidden')) {
+                document.getElementById('manual-html').focus();
+            }
+        }
+
+        // --- Export Feature for GitHub ---
+        function exportStaticData() {
+            const jsonText = JSON.stringify(appData.students, null, 4);
+            
+            // Try clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(jsonText).then(() => {
+                    alert("✅ Data copied to clipboard!\n\nOpen your index.html file, find the 'STATIC_STUDENTS' array near the bottom, and paste the data inside the brackets. Then deploy to GitHub!");
+                }).catch(() => fallbackCopy(jsonText));
+            } else {
+                fallbackCopy(jsonText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                alert("✅ Data copied to clipboard!\n\nOpen your index.html file, find the 'STATIC_STUDENTS' array near the bottom, and paste the data inside the brackets. Then deploy to GitHub!");
+            } catch (err) {
+                alert("Auto-copy failed. Please check the browser console to copy the JSON manually.");
+                console.log("PASTE THIS INTO STATIC_STUDENTS ARRAY:\n\n", text);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        async function loadViaProxy() {
+            showScreen('screen-loading');
+            const titleEl = document.getElementById('loading-title');
+            const descEl = document.getElementById('loading-desc');
+            const targetUrl = 'https://www.elicsir.it/studenti';
+            
+            let htmlText = '';
+            
+            try {
+                titleEl.textContent = "Trying Primary Proxy...";
+                const res1 = await fetch(`https://corsproxy.io/?${encodeURIComponent(targetUrl)}`);
+                if (res1.ok) {
+                    htmlText = await res1.text();
+                } else {
+                    throw new Error("Proxy 1 failed");
+                }
+            } catch (e1) {
+                try {
+                    titleEl.textContent = "Trying Backup Proxy...";
+                    const res2 = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`);
+                    if (res2.ok) {
+                        const data = await res2.json();
+                        htmlText = data.contents;
+                    } else {
+                        throw new Error("Proxy 2 failed");
+                    }
+                } catch (e2) {
+                    alert("Network Error: Both proxies were blocked by the website. Please click 'Paste HTML Source'.");
+                    showScreen('screen-intro');
+                    return;
+                }
+            }
+
+            titleEl.textContent = "Parsing Profiles...";
+            descEl.textContent = "Finding names and universities.";
+            
+            setTimeout(() => {
+                const extracted = parseProfilesRobust(htmlText);
+                
+                if (extracted.length === 0) {
+                    alert("Website blocked content extraction. Please use 'Paste HTML Source' instead.");
+                    showScreen('screen-intro');
+                    return;
+                }
+                
+                appData.students = extracted;
+                renderReviewList();
+                showScreen('screen-review');
+            }, 500);
+        }
+
+        function loadManual() {
+            const htmlText = document.getElementById('manual-html').value;
+            if (!htmlText || htmlText.trim().length < 50) {
+                return alert("Please paste the full HTML source code first.");
+            }
+            
+            showScreen('screen-loading');
+            document.getElementById('loading-title').textContent = "Parsing HTML...";
+            
+            setTimeout(() => {
+                const extracted = parseProfilesRobust(htmlText);
+                if (extracted.length === 0) {
+                    alert("Could not find student profiles. Ensure you copied raw HTML (Ctrl+U).");
+                    showScreen('screen-intro');
+                    return;
+                }
+                
+                appData.students = extracted;
+                renderReviewList();
+                showScreen('screen-review');
+            }, 300);
+        }
+
+        function parseProfilesRobust(htmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, "text/html");
+            const students = [];
+            const seenNames = new Set();
+
+            const images = doc.querySelectorAll('img');
+            
+            images.forEach(img => {
+                const w = img.getAttribute('width');
+                if (w && parseInt(w) < 150) return; 
+                
+                let imgSrc = img.getAttribute('src') || img.getAttribute('data-src');
+                if (!imgSrc || imgSrc.includes('logo') || imgSrc.includes('icon') || imgSrc.includes('svg')) return;
+
+                let card = img.closest('.elementor-column, .elementor-widget-wrap, .student-card, .wp-block-column');
+                if (!card) {
+                    card = img.parentElement;
+                    for(let i=0; i<2; i++) {
+                        if (card && card.parentElement) card = card.parentElement;
+                    }
+                }
+                
+                if (!card) return;
+
+                const walker = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, null, false);
+                let node;
+                const textChunks = [];
+                
+                while ((node = walker.nextNode())) {
+                    const text = node.textContent.replace(/\s+/g, ' ').trim();
+                    if (text.length > 2) {
+                        textChunks.push(text);
+                    }
+                }
+
+                const uniqueTexts = [...new Set(textChunks)];
+                
+                if (uniqueTexts.length >= 2) {
+                    let name = uniqueTexts[0];
+                    let uni = uniqueTexts[1];
+
+                    if (name.length < 50 && !seenNames.has(name)) {
+                        seenNames.add(name);
+                        
+                        if (imgSrc && imgSrc.includes(' ')) imgSrc = imgSrc.split(' ')[0];
+                        if (!imgSrc.startsWith('http') && !imgSrc.startsWith('data:')) {
+                            imgSrc = imgSrc.startsWith('/') ? 'https://www.elicsir.it' + imgSrc : 'https://www.elicsir.it/' + imgSrc;
+                        }
+
+                        students.push({
+                            id: Math.random().toString(36).substr(2, 9),
+                            name: name,
+                            university: uni,
+                            image: imgSrc
+                        });
+                    }
+                }
+            });
+
+            return students;
+        }
+
+        function renderReviewList() {
+            document.getElementById('review-count').textContent = appData.students.length;
+            const list = document.getElementById('review-list');
+            
+            if (appData.students.length === 0) {
+                list.innerHTML = '<div class="p-8 text-center text-stone-500 font-medium">No valid profiles remaining. Go back and reload.</div>';
+                return;
+            }
+            
+            list.innerHTML = appData.students.map(s => `
+                <div class="flex items-center p-4 hover:bg-orange-50/50 transition-colors">
+                    <div class="shrink-0 w-12 h-16 relative mr-4">
+                        <img src="${s.image}" class="w-full h-full rounded-md object-cover object-top bg-stone-100 shadow-sm border border-stone-200" onerror="this.src='data:image/svg+xml;base64,...'">
+                    </div>
+                    <div class="flex-1 min-w-0 pr-4">
+                        <h3 class="font-bold text-stone-800 leading-tight truncate text-sm">${s.name}</h3>
+                        <p class="text-xs text-stone-500 truncate mt-0.5">${s.university}</p>
+                    </div>
+                    <button onclick="removeStudent('${s.id}')" class="p-2 shrink-0 text-stone-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all" title="Remove from deck">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeStudent(id) {
+            appData.students = appData.students.filter(s => s.id !== id);
+            renderReviewList();
+        }
+
+        function startGame() {
+            if (appData.students.length === 0) return alert("You must have at least one student in the deck!");
+            
+            appData.deck = [...appData.students].sort(() => Math.random() - 0.5);
+            appData.total = appData.students.length;
+            appData.learned = 0;
+            
+            showScreen('screen-game');
+            nextCard();
+        }
+
+        function nextCard() {
+            if (appData.deck.length === 0) {
+                showScreen('screen-end');
+                return;
+            }
+            
+            appData.isFlipped = false;
+            document.getElementById('flashcard-inner').classList.remove('flipped');
+            
+            const actions = document.getElementById('game-actions');
+            actions.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            actions.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            
+            appData.currentStudent = appData.deck[0];
+            
+            setTimeout(() => {
+                document.getElementById('card-front-img').src = appData.currentStudent.image;
+                document.getElementById('card-back-img').src = appData.currentStudent.image;
+                document.getElementById('card-front-uni').textContent = appData.currentStudent.university;
+                document.getElementById('card-back-name').textContent = appData.currentStudent.name;
+            }, 150);
+            
+            updateProgress();
+        }
+
+        function flipCard() {
+            if (appData.isFlipped) return; 
+            appData.isFlipped = true;
+            
+            document.getElementById('flashcard-inner').classList.add('flipped');
+            
+            setTimeout(() => {
+                const actions = document.getElementById('game-actions');
+                actions.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                actions.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }, 250);
+        }
+
+        function handleAnswer(didKnow) {
+            if (!appData.isFlipped) return;
+            
+            const student = appData.deck.shift(); 
+            
+            if (didKnow) {
+                appData.learned++;
+            } else {
+                if (appData.deck.length > 1) {
+                    const insertIndex = Math.floor(Math.random() * (appData.deck.length - 1)) + 1;
+                    appData.deck.splice(insertIndex, 0, student);
+                } else {
+                    appData.deck.push(student);
+                }
+            }
+            
+            nextCard();
+        }
+
+        function updateProgress() {
+            document.getElementById('game-learned').textContent = appData.learned;
+            document.getElementById('game-total').textContent = appData.total;
+            document.getElementById('game-remaining').textContent = appData.deck.length;
+            
+            const percent = (appData.learned / appData.total) * 100;
+            document.getElementById('game-progress-bar').style.width = `${percent}%`;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            const gameScreen = document.getElementById('screen-game');
+            if (gameScreen.classList.contains('hidden')) return;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (!appData.isFlipped) flipCard();
+            } else if (e.code === 'ArrowLeft' && appData.isFlipped) {
+                handleAnswer(false);
+            } else if (e.code === 'ArrowRight' && appData.isFlipped) {
+                handleAnswer(true);
+            }
+        });
+
+    </script>
+</body>
+</html>
