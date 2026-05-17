@@ -72,18 +72,9 @@
         <!-- 3. REVIEW SCREEN -->
         <div id="screen-review" class="hidden flex-col h-full bg-stone-50 relative">
             <div class="p-4 sm:p-5 bg-white border-b border-stone-200 shrink-0 z-10 shadow-sm flex flex-col gap-3">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5">Il tuo Mazzo</h2>
-                        <p class="text-xs sm:text-sm text-stone-500">Trovati <span id="review-count" class="font-bold text-orange-500">0</span> profili.</p>
-                    </div>
-                    <div class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-xl border border-stone-100">
-                        <span class="text-[11px] font-bold text-stone-500 uppercase">Docenti</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="toggle-docenti" class="sr-only peer" onchange="toggleDocenti()">
-                            <div class="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-500"></div>
-                        </label>
-                    </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-800 mb-0.5">Il tuo Mazzo</h2>
+                    <p class="text-xs sm:text-sm text-stone-500">Trovati <span id="review-count" class="font-bold text-orange-500">0</span> profili.</p>
                 </div>
                 
                 <div class="flex flex-wrap gap-2 pt-1 border-t border-stone-100" id="group-filters">
@@ -98,6 +89,10 @@
                     <button onclick="toggleGroup('c')" id="btn-group-c" class="px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm">
                         <span>Contaminazioni</span>
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                    <button onclick="toggleDocentiBtn()" id="btn-group-docenti" class="px-3 py-1.5 bg-stone-100 text-stone-500 text-[11px] sm:text-xs font-bold rounded-lg hover:bg-stone-200 transition-colors flex items-center gap-1">
+                        <span>Docenti</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     </button>
                 </div>
             </div>
@@ -304,7 +299,7 @@
             { id: "f98cgyd3w", name: "Marco Tessari", university: "Università degli Studi di Padova", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Marco-Tessari.jpg?v=1.0.006", group: "2" },
             { id: "4rdlunj50", name: "Lisa Vecchi", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/Lisa-Vecchi.jpeg?v=1.0.006", group: "2" },
             { id: "xvuaom6oj", name: "Gianfranco Vitiello", university: "Università degli Studi di Salerno", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/10/GIANFRANCO_VITIELLO.jpg?v=1.0.006", group: "2" },
-            // --- CONTAMINANDI ('c') ---
+            // --- CONTAMINAZIONI ('c') ---
             { id: "kt3am2eb0", name: "Samuele Artico", university: "Università di Pisa / Scuola Normale Superiore", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/Samuele_Artico-scaled.png?v=1.0.006", group: "c" },
             { id: "0u80b0j1g", name: "Martyna Babiak", university: "Sapienza Università di Roma", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/martycut.jpeg?v=1.0.006", group: "c" },
             { id: "zmkxw53af", name: "Niccolò Ballardini", university: "Università di Bologna", image: "https://elicsir-wp.afterpixel.com/app/uploads/2025/11/NICCOLO-BALLARDINI.jpeg?v=1.0.006", group: "c" },
@@ -500,8 +495,17 @@
         // ==========================================
         // DECK & FILTERS LOGIC
         // ==========================================
-        function toggleDocenti() {
-            appData.includeDocenti = document.getElementById('toggle-docenti').checked;
+        function toggleDocentiBtn() {
+            appData.includeDocenti = !appData.includeDocenti;
+            const btn = document.getElementById('btn-group-docenti');
+            
+            if (appData.includeDocenti) {
+                btn.className = "px-3 py-1.5 bg-orange-500 text-white text-[11px] sm:text-xs font-bold rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-1 shadow-sm";
+                btn.innerHTML = `<span>Docenti</span><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`;
+            } else {
+                btn.className = "px-3 py-1.5 bg-stone-100 text-stone-500 text-[11px] sm:text-xs font-bold rounded-lg hover:bg-stone-200 transition-colors flex items-center gap-1";
+                btn.innerHTML = `<span>Docenti</span><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>`;
+            }
             updateActiveDeck();
         }
 
